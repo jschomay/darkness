@@ -7,38 +7,25 @@ import ClientTypes exposing (..)
 
 
 view :
-    List StorySnippet
-    -> Maybe String
+    List (Html Msg)
     -> Html Msg
-view storyLine ending =
+view storyLine =
     let
-        storyLi i { interactableName, interactableCssSelector, narration } =
+        storyLi i story =
             let
                 numLines =
                     List.length storyLine
 
                 key =
-                    interactableName ++ (toString <| numLines - i)
+                    toString <| numLines - i
 
                 classes =
-                    [ ( "Storyline__Item", True )
-                    , ( "Storyline__Item--" ++ interactableCssSelector, True )
-                    , ( "u-fade-in", i == 0 )
-                    ]
+                    classList
+                        [ ( "Storyline__Item", True )
+                        , ( "u-fade-in", True )
+                        ]
             in
-                ( key
-                , li [ classList classes ] <|
-                    [ h4 [ class "Storyline__Item__Action" ] <| [ text interactableName ]
-                    , p [ class "Storyline__Item__Narration markdown-body" ] [ text narration ]
-                    ]
-                        ++ if i == 0 && ending /= Nothing then
-                            [ h5
-                                [ class "Storyline__Item__Ending" ]
-                                [ text <| Maybe.withDefault "The End" ending ]
-                            ]
-                           else
-                            []
-                )
+                ( key, li [ classes ] [ p [] [ story ] ] )
     in
-        Html.Keyed.ol [ class "Storyline" ]
+        Html.Keyed.ol [ class "StoryLine" ]
             (List.indexedMap storyLi storyLine)

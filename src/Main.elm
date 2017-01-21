@@ -4,7 +4,6 @@ import Engine exposing (..)
 import Story.Manifest exposing (..)
 import Story.Scenes exposing (..)
 import Html exposing (..)
-import Theme.TitlePage
 import Theme.Layout
 import ClientTypes exposing (..)
 import Dict exposing (Dict)
@@ -12,9 +11,8 @@ import Dict exposing (Dict)
 
 type alias Model =
     { engineModel : Engine.Model
-    , route : Route
     , loaded : Bool
-    , storyLine : List StorySnippet
+    , storyLine : List String
     }
 
 
@@ -53,14 +51,9 @@ init =
                 [ moveTo "darkness"
                 , loadScene "begining"
                 ]
-      , route = TitlePage
       , loaded = False
       , storyLine =
-            [ { interactableName = "Begin"
-              , interactableCssSelector = ""
-              , narration = "Darkness"
-              }
-            ]
+            [ "It is in the face of [darkness], that we remember the importance of light." ]
       }
     , Cmd.none
     )
@@ -78,12 +71,8 @@ update msg model =
                     Engine.update interactableId model.engineModel
 
                 narration =
-                    { interactableName = getAttributes interactableId |> .name
-                    , interactableCssSelector = getAttributes interactableId |> .cssSelector
-                    , narration =
-                        getNarration maybeMatchedRuleId
-                            |> Maybe.withDefault (getAttributes interactableId |> .description)
-                    }
+                    getNarration maybeMatchedRuleId
+                        |> Maybe.withDefault (getAttributes interactableId |> .description)
             in
                 ( { model
                     | engineModel = newEngineModel
@@ -92,11 +81,6 @@ update msg model =
                 , Cmd.none
                 )
 
-        StartGame ->
-            ( { model | route = GamePage }
-            , Cmd.none
-            )
-
         Loaded ->
             ( { model | loaded = True }
             , Cmd.none
@@ -104,7 +88,6 @@ update msg model =
 
 
 port loaded : (Bool -> msg) -> Sub msg
-
 
 
 subscriptions : Model -> Sub ClientTypes.Msg
@@ -143,40 +126,13 @@ getAttributes id =
                 attrs
 
 
+parse : String -> Html Msg
+parse storyText =
+    text storyText
+
+
 view :
     Model
     -> Html ClientTypes.Msg
 view model =
-    case model.route of
-        TitlePage ->
-            Theme.TitlePage.view StartGame model.loaded
-
-        GamePage ->
-            let
-                idAndAttrs : Id -> ( Id, Attributes )
-                idAndAttrs id =
-                    ( id, getAttributes id )
-
-                displayState =
-                    { currentLocation =
-                        Engine.getCurrentLocation model.engineModel
-                            |> idAndAttrs
-                    , itemsInCurrentLocation =
-                        Engine.getItemsInCurrentLocation model.engineModel
-                            |> List.map idAndAttrs
-                    , charactersInCurrentLocation =
-                        Engine.getCharactersInCurrentLocation model.engineModel
-                            |> List.map idAndAttrs
-                    , locations =
-                        Engine.getLocations model.engineModel
-                            |> List.map idAndAttrs
-                    , itemsInInventory =
-                        Engine.getItemsInInventory model.engineModel
-                            |> List.map idAndAttrs
-                    , ending =
-                        Engine.getEnding model.engineModel
-                    , storyLine =
-                        model.storyLine
-                    }
-            in
-                Theme.Layout.view displayState
+    Theme.Layout.view <| List.map parse model.storyLine
