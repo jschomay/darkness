@@ -16,16 +16,13 @@ view storyLine =
                 numLines =
                     List.length storyLine
 
-                key =
-                    toString <| numLines - i
-
                 classes =
                     classList
                         [ ( "Storyline__Item", True )
                         , ( "u-fade-in", True )
                         ]
             in
-                ( key, li [ classes ] [ p [] [ story ] ] )
+                ( toString i, li [ classes ] [ p [] [ story ] ] )
     in
         Html.Keyed.ol [ class "StoryLine" ]
             (List.indexedMap storyLi storyLine)

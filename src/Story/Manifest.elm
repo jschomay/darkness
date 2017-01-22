@@ -33,9 +33,9 @@ characters =
 locations : List ( Id, Attributes )
 locations =
     []
-        ++ ( "darkness"
+        ++ ( "darkness1"
            , { name = "darkness"
-             , description = """I am alone.  Alone in this overwhelming [darkness].
+             , description = """I am alone.  Alone in this overwhelming [darkness1].
 
 I wave my hand in front of my eyes, but I see nothing.
 

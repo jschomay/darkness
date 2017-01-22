@@ -24,5 +24,3 @@ learnOfMystery =
            , [ "narration here" ]
            )
         :: []
-
-

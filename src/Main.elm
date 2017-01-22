@@ -7,6 +7,7 @@ import Html exposing (..)
 import Theme.Layout
 import ClientTypes exposing (..)
 import Dict exposing (Dict)
+import Hypermedia exposing (parse)
 
 
 type alias Model =
@@ -53,7 +54,7 @@ init =
                 ]
       , loaded = False
       , storyLine =
-            [ "It is in the face of [darkness], that we remember the importance of light." ]
+            [ "It is in the face of [darkness1], that we remember the importance of light." ]
       }
     , Cmd.none
     )
@@ -76,7 +77,7 @@ update msg model =
             in
                 ( { model
                     | engineModel = newEngineModel
-                    , storyLine = narration :: model.storyLine
+                    , storyLine = model.storyLine ++ [ narration ]
                   }
                 , Cmd.none
                 )
@@ -114,21 +115,27 @@ getNarration ruleId =
 
 getAttributes : Id -> Attributes
 getAttributes id =
-    let
-        interactables =
-            Dict.fromList (items ++ locations ++ characters)
-    in
-        case Dict.get id interactables of
-            Nothing ->
-                Debug.crash <| "Cannot find an interactable for id " ++ id
+    case Dict.get id interactables of
+        Nothing ->
+            Debug.crash <| "Cannot find an interactable for id " ++ id
 
-            Just attrs ->
-                attrs
+        Just attrs ->
+            attrs
+
+
+interactables : Dict Id Attributes
+interactables =
+    Dict.fromList (items ++ locations ++ characters)
 
 
 parse : String -> Html Msg
 parse storyText =
-    text storyText
+    case Hypermedia.parse (Dict.map (always .name) interactables) storyText of
+        Ok children ->
+            div [] children
+
+        Err errs ->
+            Debug.crash "Problems parsing hypermedia!"
 
 
 view :
