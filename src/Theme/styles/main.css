@@ -46,7 +46,9 @@ p {
 }
 
 .StoryLine__Item {
+  opacity: 0;
   margin-bottom: 60px;
+  animation: fadeIn 1s ease-in-out forwards;
 }
 
 .u-interactable {
@@ -60,20 +62,8 @@ p {
   text-shadow: 0px 0px 18px rgba(255, 255, 255, 0.4);
 }
 
-.u-selectable:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.u-fade-in {
-  opacity: 0;
-  animation: fadeIn 1s linear forwards;
-}
-
 @keyframes fadeIn {
   to {
     opacity: 1;
   }
 }
-
-

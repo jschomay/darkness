@@ -15,14 +15,8 @@ view storyLine =
             let
                 numLines =
                     List.length storyLine
-
-                classes =
-                    classList
-                        [ ( "StoryLine__Item", True )
-                        , ( "u-fade-in", True )
-                        ]
             in
-                ( toString i, li [ classes ] story )
+                ( toString i, li [ class "StoryLine__Item" ] story )
     in
         Html.Keyed.ol [ class "StoryLine" ]
             (List.indexedMap storyLi storyLine)
