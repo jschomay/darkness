@@ -4,6 +4,7 @@ module ClientTypes exposing (..)
 type Msg
     = Interact Id
     | Loaded
+    | NoOp
 
 
 type alias Id =

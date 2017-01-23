@@ -7,7 +7,9 @@ import Html exposing (..)
 import Theme.Layout
 import ClientTypes exposing (..)
 import Dict exposing (Dict)
+import Task
 import Hypermedia exposing (parse)
+import Dom.Scroll as Dom
 
 
 type alias Model =
@@ -79,13 +81,17 @@ update msg model =
                     | engineModel = newEngineModel
                     , storyLine = model.storyLine ++ [ narration ]
                   }
-                , Cmd.none
+                , Task.attempt (always NoOp) <|
+                    Task.mapError identity (Dom.toBottom "Storyline")
                 )
 
         Loaded ->
             ( { model | loaded = True }
             , Cmd.none
             )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 port loaded : (Bool -> msg) -> Sub msg

@@ -16,7 +16,7 @@ view storyLine =
                 numLines =
                     List.length storyLine
             in
-                ( toString i, li [ class "StoryLine__Item" ] story )
+                ( toString i, li [ class "Storyline__Item" ] story )
     in
-        Html.Keyed.ol [ class "StoryLine" ]
+        Html.Keyed.ol [ id "Storyline", class "Storyline" ]
             (List.indexedMap storyLi storyLine)

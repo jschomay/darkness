@@ -31,21 +31,22 @@ p {
 .Layout {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: auto;
   width: 80%;
-  padding-top: 150px;
+}
+
+.Storyline {
+  overflow: auto;
   padding-bottom: 100px;
 }
 
-.StoryLine {
-}
-
-.StoryLine__Item {
+.Storyline__Item {
   opacity: 0;
   margin-bottom: 60px;
   animation: fadeIn 1s ease-in-out forwards;
