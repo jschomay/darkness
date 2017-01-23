@@ -1,15 +1,29 @@
-module Hypermedia exposing (parse)
+module Hypermedia exposing (parse, parseMultiLine)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Combine exposing (..)
 import Dict exposing (Dict)
-import ClientTypes exposing (..)
 
 
-parse : Dict String String -> String -> Result (List String) (List (Html Msg))
-parse display input =
+parseMultiLine : (String -> msg) -> Dict String String -> String -> List (Html msg)
+parseMultiLine msg display input =
+    String.split "\n\n" input
+        |> List.map
+            (p []
+                << \paragraph ->
+                    case parse msg display paragraph of
+                        Ok children ->
+                            children
+
+                        Err errs ->
+                            Debug.crash "Problem parsing your text!"
+            )
+
+
+parse : (String -> msg) -> Dict String String -> String -> Result (List String) (List (Html msg))
+parse msg display input =
     let
         parseHelper parser f errorString =
             parser
@@ -26,7 +40,7 @@ parse display input =
             let
                 toClickable id =
                     span
-                        [ onClick <| Interact id
+                        [ onClick <| msg id
                         , class "u-interactable"
                         ]
                         [ text <|

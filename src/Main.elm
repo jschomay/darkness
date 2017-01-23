@@ -7,7 +7,6 @@ import Html exposing (..)
 import Theme.Layout
 import ClientTypes exposing (..)
 import Dict exposing (Dict)
-import String
 import Hypermedia exposing (parse)
 
 
@@ -129,23 +128,15 @@ interactables =
     Dict.fromList (items ++ locations ++ characters)
 
 
-parse : String -> List (Html Msg)
-parse storyText =
-    String.split "\n\n" storyText
-        |> List.map
-            (\paragraph ->
-                case Hypermedia.parse (Dict.map (always .name) interactables) paragraph of
-                    Ok children ->
-                        children
-                            |> p []
-
-                    Err errs ->
-                        Debug.crash "Problems parsing hypermedia!"
-            )
-
-
 view :
     Model
     -> Html ClientTypes.Msg
 view model =
-    Theme.Layout.view <| List.map parse model.storyLine
+    let
+        display =
+            Dict.map (always .name) interactables
+    in
+        Theme.Layout.view <|
+            List.map
+                (Hypermedia.parseMultiLine Interact display)
+                model.storyLine
