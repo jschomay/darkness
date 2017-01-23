@@ -82,7 +82,7 @@ update msg model =
                     , storyLine = model.storyLine ++ [ narration ]
                   }
                 , Task.attempt (always NoOp) <|
-                    Task.mapError identity (Dom.toBottom "Storyline")
+                    Task.mapError identity (Dom.toBottom "scroll-container")
                 )
 
         Loaded ->

@@ -10,7 +10,7 @@ view :
     List (List (Html Msg))
     -> Html Msg
 view storyLine =
-    div [ class <| "Game" ]
+    div [ class "Game" ]
         [ div [ class "Layout" ]
             [ Theme.Storyline.view storyLine ]
         ]

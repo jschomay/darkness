@@ -31,8 +31,7 @@ p {
 .Layout {
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +41,7 @@ p {
 }
 
 .Storyline {
-  overflow: auto;
+  padding-top: 80px;
   padding-bottom: 100px;
 }
 
