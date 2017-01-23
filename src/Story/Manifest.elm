@@ -35,9 +35,7 @@ locations =
     []
         ++ ( "darkness1"
            , { name = "darkness"
-             , description = """I am alone.  Alone in this overwhelming [darkness1].
-
-I wave my hand in front of my eyes, but I see nothing.
+             , description = """I am alone.  Alone in this overwhelming [darkness1].  I wave my hand in front of my eyes, but I see nothing.
 
 I have some things with me.  A [photograph].  I don't even remember what of.  A [lighter].
 """

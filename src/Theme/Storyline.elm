@@ -7,7 +7,7 @@ import ClientTypes exposing (..)
 
 
 view :
-    List (Html Msg)
+    List (List (Html Msg))
     -> Html Msg
 view storyLine =
     let
@@ -18,11 +18,11 @@ view storyLine =
 
                 classes =
                     classList
-                        [ ( "Storyline__Item", True )
+                        [ ( "StoryLine__Item", True )
                         , ( "u-fade-in", True )
                         ]
             in
-                ( toString i, li [ classes ] [ p [] [ story ] ] )
+                ( toString i, li [ classes ] story )
     in
         Html.Keyed.ol [ class "StoryLine" ]
             (List.indexedMap storyLi storyLine)

@@ -7,7 +7,7 @@ import ClientTypes exposing (..)
 
 
 view :
-    List (Html Msg)
+    List (List (Html Msg))
     -> Html Msg
 view storyLine =
     div [ class <| "Game" ]
