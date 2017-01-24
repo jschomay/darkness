@@ -52,7 +52,7 @@ init =
                 }
                 (stripNarration scenes)
                 [ moveTo "darkness"
-                , loadScene "begining"
+                , loadScene "intro"
                 ]
       , loaded = False
       , storyLine =
@@ -73,13 +73,19 @@ update msg model =
                 ( newEngineModel, maybeMatchedRuleId ) =
                     Engine.update interactableId model.engineModel
 
-                narration =
+                newNarration =
                     getNarration maybeMatchedRuleId
                         |> Maybe.withDefault (getAttributes interactableId |> .description)
+
+                updateNarration =
+                    if Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel then
+                        model.storyLine ++ [ newNarration ]
+                    else
+                        [ newNarration ]
             in
                 ( { model
                     | engineModel = newEngineModel
-                    , storyLine = model.storyLine ++ [ narration ]
+                    , storyLine = updateNarration
                   }
                 , Task.attempt (always NoOp) <|
                     Task.mapError identity (Dom.toBottom "scroll-container")
@@ -142,7 +148,7 @@ view model =
         display =
             Dict.map (always .name) interactables
     in
-        Theme.Layout.view <|
+        Theme.Layout.view (Engine.getCurrentScene model.engineModel) <|
             List.map
                 (Hypermedia.parseMultiLine Interact display)
                 model.storyLine

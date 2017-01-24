@@ -35,10 +35,14 @@ locations =
     []
         ++ ( "darkness1"
            , { name = "darkness"
-             , description = """I am alone.  Alone in this overwhelming [darkness1].  I wave my hand in front of my eyes, but I see nothing.
-
-I have some things with me.  A [photograph].  I don't even remember what of.  A [lighter].
-"""
+             , description = "Will this darkness go on for ever?  How can I find my way without any light?"
              }
            )
         :: []
+
+
+
+{-
+   Darkness - is there a way out?  How can I move through it?)
+   Hear wheezing, you can confront (I'm making my way out, but I only have 1 candle left an I'm out of matches/ I can help/ leading in circles?) or hide (Is someone there?/ Don't trust someone who doesn't speak up/ Hits you, seeing stars, loosing consciousness, but dancing stars give glorious respite from the everpresent darkness).
+-}

@@ -7,16 +7,17 @@ import ClientTypes exposing (..)
 
 
 view :
-    List (List (Html Msg))
+    String
+    -> List (List (Html Msg))
     -> Html Msg
-view storyLine =
+view currentScene storyLine =
     let
         storyLi i story =
             let
                 numLines =
                     List.length storyLine
             in
-                ( toString i, li [ class "Storyline__Item" ] story )
+                ( currentScene ++ (toString i), li [ class "Storyline__Item" ] story )
     in
         Html.Keyed.ol [ id "Storyline", class "Storyline" ]
             (List.indexedMap storyLi storyLine)

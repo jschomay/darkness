@@ -6,21 +6,37 @@ import ClientTypes exposing (..)
 
 scenes : List ( Id, List ( Id, Engine.Rule, Narration ) )
 scenes =
-    [ ( "learnOfMystery", learnOfMystery )
+    [ ( "intro", intro )
+    , ( "alone", alone )
     ]
 
 
-learnOfMystery : List ( Id, Engine.Rule, Narration )
-learnOfMystery =
+intro : List ( Id, Engine.Rule, Narration )
+intro =
     []
-        ++ ( "get note from harry"
-           , { interaction = withCharacter "Harry"
-             , conditions = [ currentLocationIs "Garden" ]
+        ++ ( "start"
+           , { interaction = withLocation "darkness1"
+             , conditions = []
              , changes =
-                [ moveCharacterToLocation "Harry" "Marsh"
-                , moveItemToInventory "NoteFromHarry"
+                [ loadScene "alone"
                 ]
              }
-           , [ "narration here" ]
+           , [ """I am alone.  Alone in this overwhelming [darkness1].  I wave my hand in front of my eyes, but I see nothing.
+
+I have some things with me.  A [photograph].  I don't even remember what of.  A [lighter].
+           """ ]
+           )
+        :: []
+
+
+alone : List ( Id, Engine.Rule, Narration )
+alone =
+    []
+        ++ ( "too dark"
+           , { interaction = withLocation "darkness1"
+             , conditions = [ itemIsInInventory "lighter" ]
+             , changes = []
+             }
+           , [ "...still can't see..." ]
            )
         :: []

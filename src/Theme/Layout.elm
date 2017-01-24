@@ -7,10 +7,12 @@ import ClientTypes exposing (..)
 
 
 view :
-    List (List (Html Msg))
+    String
+    -> List (List (Html Msg))
     -> Html Msg
-view storyLine =
-    div [ class "Game" ]
+view currentScene storyLine =
+    div [ class <| "Game Game--" ++ currentScene ]
         [ div [ class "Layout" ]
-            [ Theme.Storyline.view storyLine ]
+            [ Theme.Storyline.view currentScene storyLine
+            ]
         ]
