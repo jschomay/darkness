@@ -18,7 +18,8 @@ parseMultiLine msg display input =
                             children
 
                         Err errs ->
-                            Debug.crash "Problem parsing your text!"
+                            -- Debug.crash <| "Problem parsing your text!  " ++ input
+                            [ text <| "<Error, could not parse: \"" ++ input ++ "\">" ]
             )
 
 
