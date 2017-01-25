@@ -73,9 +73,16 @@ update msg model =
                 ( newEngineModel, maybeMatchedRuleId ) =
                     Engine.update interactableId model.engineModel
 
+                newNarration : String
                 newNarration =
-                    getNarration maybeMatchedRuleId
-                        |> Maybe.withDefault (getAttributes interactableId |> .description)
+                    case getNarration maybeMatchedRuleId of
+                        Just narration ->
+                            narration
+
+                        Nothing ->
+                            Maybe.withDefault
+                                ("<Error, could not find display information for interactable id \"" ++ interactableId ++ "\">")
+                                (Maybe.map .description <| getAttributes interactableId)
 
                 updateNarration =
                     if Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel then
@@ -125,14 +132,9 @@ getNarration ruleId =
         |> Maybe.andThen List.head
 
 
-getAttributes : Id -> Attributes
+getAttributes : Id -> Maybe Attributes
 getAttributes id =
-    case Dict.get id interactables of
-        Nothing ->
-            Debug.crash <| "Cannot find an interactable for id " ++ id
-
-        Just attrs ->
-            attrs
+    Dict.get id interactables
 
 
 interactables : Dict Id Attributes

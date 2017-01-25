@@ -45,7 +45,7 @@ parse msg display input =
                         , class "u-interactable"
                         ]
                         [ text <|
-                            Maybe.withDefault id <|
+                            Maybe.withDefault ("<Undefined: " ++ id ++ ">") <|
                                 Dict.get id display
                         ]
             in
