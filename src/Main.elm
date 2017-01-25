@@ -56,7 +56,7 @@ init =
                 ]
       , loaded = False
       , storyLine =
-            [ "It is in the face of [darkness1], that we remember the importance of light." ]
+            [ "\"It is in the face of [darkness1], that we remember the importance of light.\"" ]
       }
     , Cmd.none
     )

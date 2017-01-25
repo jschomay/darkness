@@ -13,7 +13,7 @@ items =
            )
         :: ( "lighter"
            , { name = "lighter"
-             , description = "It feels almost empty."
+             , description = "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
              }
            )
         :: []
@@ -43,6 +43,5 @@ locations =
 
 
 {-
-   Darkness - is there a way out?  How can I move through it?)
    Hear wheezing, you can confront (I'm making my way out, but I only have 1 candle left an I'm out of matches/ I can help/ leading in circles?) or hide (Is someone there?/ Don't trust someone who doesn't speak up/ Hits you, seeing stars, loosing consciousness, but dancing stars give glorious respite from the everpresent darkness).
 -}
