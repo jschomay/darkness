@@ -19,46 +19,39 @@ parseMultiLine msg display input =
 
                         Err errs ->
                             -- Debug.crash <| "Problem parsing your text!  " ++ input
-                            [ text <| "<Error, could not parse: \"" ++ input ++ "\">" ]
+                            [ text <| "<Error, could not parse: \"" ++ input ++ "\".  Check your syntax in this block of text.>" ]
             )
 
 
 parse : (String -> msg) -> Dict String String -> String -> Result (List String) (List (Html msg))
 parse msg display input =
     let
-        parseHelper parser f errorString =
-            parser
-                |> Combine.map f
-                |> Combine.mapError (always [ errorString ])
+        toClickable : String -> Maybe String -> Html msg
+        toClickable id textOverride =
+            span
+                [ onClick <| msg id
+                , class "u-interactable"
+                ]
+                [ Dict.get id display
+                    |> Maybe.map (flip Maybe.withDefault textOverride)
+                    |> Maybe.withDefault ("<Error, could not find display information for interactable id \"" ++ id ++ "\">")
+                    |> text
+                ]
 
-        storyText =
-            parseHelper
-                (regex "[^\\[]+")
-                text
-                "I was looking for unbracketed text."
+        storyTextParser =
+            Combine.map text <| regex "[^\\[]+"
 
-        interactable =
-            let
-                toClickable id =
-                    span
-                        [ onClick <| msg id
-                        , class "u-interactable"
-                        ]
-                        [ text <|
-                            Maybe.withDefault ("<Undefined: " ++ id ++ ">") <|
-                                Dict.get id display
-                        ]
-            in
-                parseHelper
-                    (brackets <| regex "[^\\]]+")
-                    toClickable
-                    "I was looking for [some text], but I found []."
+        interactableParser =
+            brackets <|
+                toClickable
+                    <$> regex "[^|\\]]+"
+                    <*> maybe (string "|" *> regex "[^\\]]+")
     in
         case
             Combine.parse
-                (mapError
+                (Combine.mapError
                     ((++) [ "Empty input provided" ])
-                    (many1 (storyText <|> interactable))
+                    (Combine.many1 (storyTextParser <|> interactableParser))
                 )
                 input
         of
