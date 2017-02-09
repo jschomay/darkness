@@ -22,9 +22,9 @@ items =
 characters : List ( Id, Attributes )
 characters =
     []
-        ++ ( "Harry"
-           , { name = "Harry"
-             , description = "Not the sharpest tool in the shed, but a good mate, always ready for a pint."
+        ++ ( "wheezy"
+           , { name = "Wheezy"
+             , description = "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
              }
            )
         :: []

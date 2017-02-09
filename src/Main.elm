@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Engine exposing (..)
 import Story.Manifest exposing (..)
-import Story.Scenes exposing (..)
+import Story.Rules exposing (..)
 import Html exposing (..)
 import Theme.Layout
 import ClientTypes exposing (..)
@@ -10,12 +10,14 @@ import Dict exposing (Dict)
 import Task
 import Hypermedia exposing (parse)
 import Dom.Scroll as Dom
+import List.Zipper as Zipper exposing (Zipper)
 
 
 type alias Model =
     { engineModel : Engine.Model
     , loaded : Bool
     , storyLine : List String
+    , content : Dict String (Maybe (Zipper String))
     }
 
 
@@ -34,29 +36,61 @@ stripAttributes =
     List.map Tuple.first
 
 
-stripNarration : List ( Id, List ( Id, Rule, Narration ) ) -> List ( Id, List ( Id, Rule ) )
-stripNarration =
-    List.map <|
-        Tuple.mapSecond <|
-            List.map <|
-                \( id, rule, _ ) -> ( id, rule )
+pluckRules : Engine.Rules
+pluckRules =
+    let
+        foldFn :
+            RuleData Engine.Rule
+            -> ( Int, Dict String Engine.Rule )
+            -> ( Int, Dict String Engine.Rule )
+        foldFn { interaction, conditions, changes } ( id, rules ) =
+            ( id + 1
+            , Dict.insert ((++) "rule" <| toString <| id + 1)
+                { interaction = interaction
+                , conditions = conditions
+                , changes = changes
+                }
+                rules
+            )
+    in
+        Tuple.second <| List.foldl foldFn ( 1, Dict.empty ) rulesData
+
+
+pluckContent : Dict String (Maybe (Zipper String))
+pluckContent =
+    let
+        foldFn :
+            RuleData Engine.Rule
+            -> ( Int, Dict String (Maybe (Zipper String)) )
+            -> ( Int, Dict String (Maybe (Zipper String)) )
+        foldFn { narrative } ( id, narratives ) =
+            ( id + 1
+            , Dict.insert ((++) "rule" <| toString <| id + 1)
+                (Zipper.fromList narrative)
+                narratives
+            )
+    in
+        Tuple.second <| List.foldl foldFn ( 1, Dict.empty ) rulesData
 
 
 init : ( Model, Cmd ClientTypes.Msg )
 init =
     ( { engineModel =
             Engine.init
-                { items = stripAttributes items
-                , locations = stripAttributes locations
-                , characters = stripAttributes characters
+                { manifest =
+                    { items = stripAttributes items
+                    , locations = stripAttributes locations
+                    , characters = stripAttributes characters
+                    }
+                , rules = pluckRules
+                , startingLocation = "darkness1"
+                , startingScene = "intro"
+                , setup = []
                 }
-                (stripNarration scenes)
-                [ moveTo "darkness"
-                , loadScene "intro"
-                ]
       , loaded = False
       , storyLine =
             [ "\"It is in the face of [darkness1], that we remember the importance of light.\"" ]
+      , content = pluckContent
       }
     , Cmd.none
     )
@@ -73,26 +107,32 @@ update msg model =
                 ( newEngineModel, maybeMatchedRuleId ) =
                     Engine.update interactableId model.engineModel
 
-                newNarration : String
-                newNarration =
-                    case getNarration maybeMatchedRuleId of
-                        Just narration ->
-                            narration
+                newNarrative : String
+                newNarrative =
+                    case getNarrative model.content maybeMatchedRuleId of
+                        Just narrative ->
+                            narrative
 
                         Nothing ->
                             Maybe.withDefault
                                 ("<Error, could not find display information for interactable id \"" ++ interactableId ++ "\">")
                                 (Maybe.map .description <| getAttributes interactableId)
 
-                updateNarration =
+                updateNarrative =
                     if Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel then
-                        model.storyLine ++ [ newNarration ]
+                        model.storyLine ++ [ newNarrative ]
                     else
-                        [ newNarration ]
+                        [ newNarrative ]
+
+                newContent =
+                    maybeMatchedRuleId
+                        |> Maybe.map (\id -> Dict.update id updateContent model.content)
+                        |> Maybe.withDefault model.content
             in
                 ( { model
                     | engineModel = newEngineModel
-                    , storyLine = updateNarration
+                    , storyLine = updateNarrative
+                    , content = newContent
                   }
                 , Task.attempt (always NoOp) <|
                     Task.mapError identity (Dom.toBottom "scroll-container")
@@ -115,21 +155,22 @@ subscriptions model =
     loaded <| always Loaded
 
 
-content : Dict String Narration
-content =
-    Dict.fromList <|
-        List.concatMap
-            (Tuple.second
-                >> (List.map (\( key, _, narration ) -> ( key, narration )))
-            )
-            scenes
-
-
-getNarration : Maybe String -> Maybe String
-getNarration ruleId =
+getNarrative : Dict String (Maybe (Zipper String)) -> Maybe String -> Maybe String
+getNarrative content ruleId =
     ruleId
-        |> Maybe.andThen (flip Dict.get content)
-        |> Maybe.andThen List.head
+        |> Maybe.andThen (\id -> Dict.get id content)
+        |> Maybe.andThen identity
+        |> Maybe.map Zipper.current
+
+
+updateContent : Maybe (Maybe (Zipper String)) -> Maybe (Maybe (Zipper String))
+updateContent =
+    let
+        nextOrStay narration =
+            Zipper.next narration
+                |> Maybe.withDefault narration
+    in
+        (Maybe.map >> Maybe.map) nextOrStay
 
 
 getAttributes : Id -> Maybe Attributes

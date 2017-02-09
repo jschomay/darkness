@@ -17,5 +17,12 @@ type alias Attributes =
     }
 
 
-type alias Narration =
+type alias Narrative =
     List String
+
+
+type alias RuleData a =
+    { a
+        | summary : String
+        , narrative : Narrative
+    }
