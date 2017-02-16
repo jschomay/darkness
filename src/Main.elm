@@ -130,8 +130,11 @@ update msg model =
                                 Maybe.map (.description << getDisplay) <|
                                     findEntity interactableId
 
+                isNewScene =
+                    Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel
+
                 updateNarrative =
-                    if Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel then
+                    if isNewScene then
                         model.storyLine ++ [ newNarrative ]
                     else
                         [ newNarrative ]
@@ -140,14 +143,20 @@ update msg model =
                     maybeMatchedRuleId
                         |> Maybe.map (\id -> Dict.update id updateContent model.content)
                         |> Maybe.withDefault model.content
+
+                maybeScroll =
+                    if isNewScene then
+                        Task.attempt (always NoOp) <|
+                            Task.mapError identity (Dom.toBottom "scroll-container")
+                    else
+                        Cmd.none
             in
                 ( { model
                     | engineModel = newEngineModel
                     , storyLine = updateNarrative
                     , content = newContent
                   }
-                , Task.attempt (always NoOp) <|
-                    Task.mapError identity (Dom.toBottom "scroll-container")
+                , maybeScroll
                 )
 
         Loaded ->
