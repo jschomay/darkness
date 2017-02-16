@@ -1,5 +1,7 @@
 module ClientTypes exposing (..)
 
+import Dict exposing (Dict)
+
 
 type Msg
     = Interact Id
@@ -11,9 +13,18 @@ type alias Id =
     String
 
 
-type alias Attributes =
-    { name : String
-    , description : String
+type alias Components =
+    Dict String Component
+
+
+type Component
+    = Display { name : String, description : String }
+    | Style String
+
+
+type alias Entity =
+    { id : String
+    , components : Components
     }
 
 

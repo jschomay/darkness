@@ -13,16 +13,16 @@ intro : List (RuleData Engine.Rule)
 intro =
     []
         ++ { summary = "start"
-           , interaction = withLocation "darkness1"
+           , interaction = withLocation "darkness"
            , conditions = [ currentSceneIs "intro" ]
            , changes =
                 [ loadScene "alone"
-                , moveItemToInventory "photograph"
+                , moveItemToInventory "worn photograph"
                 , moveItemToInventory "lighter"
                 ]
-           , narrative = [ """I am alone.  Alone in this overwhelming [darkness1].  I wave my hand in front of my eyes, but I see nothing.
+           , narrative = [ """I am alone.  Alone in this overwhelming [darkness].  I wave my hand in front of my eyes, but I see nothing.
 
-I have some things with me.  A [photograph].  I don't even remember what of.  A [lighter].
+I have some things with me.  A [worn photograph].  I don't even remember what of.  A [lighter].
            """ ]
            }
         :: []
@@ -32,13 +32,13 @@ alone : List (RuleData Engine.Rule)
 alone =
     []
         ++ { summary = "stumble through the dark"
-           , interaction = withLocation "darkness1"
+           , interaction = withLocation "darkness"
            , conditions =
                 [ beenThereDoneThat "lighter"
                 , currentSceneIs "alone"
                 ]
-           , changes = [ loadScene "wheezy" ]
-           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nSlowly... I don't want to run into anything or fall.  Here is a wall.  It is rough and jagged, but I can follow it.  Where does it go?  Is there a way out?  What if I--\n\nWait.  I hear something.  A low, raspy breathing.  [wheezy|Someone or something] is in here with me.\n\nIt's coming closer.  What do I do?  Maybe I can [hide]." ]
+           , changes = [ loadScene "Wheezy" ]
+           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nSlowly... I don't want to run into anything or fall.  Here is a wall.  It is rough and jagged, but I can follow it.  Where does it go?  Is there a way out?  What if I--\n\nWait.  I hear something.  A low, raspy breathing.  [Wheezy|Someone or something] is in here with me.\n\nIt's coming closer.  What do I do?  Maybe I can [hide]." ]
            }
         :: []
 

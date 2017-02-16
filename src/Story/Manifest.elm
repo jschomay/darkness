@@ -1,44 +1,58 @@
 module Story.Manifest exposing (items, locations, characters)
 
 import ClientTypes exposing (..)
+import Dict exposing (Dict)
 
 
-items : List ( Id, Attributes )
+display : String -> String -> Components
+display name description =
+    Dict.fromList [ ( "display", Display { name = name, description = description } ) ]
+
+
+addStyle : String -> Components -> Components
+addStyle selector components =
+    Dict.insert "style" (Style selector) components
+
+
+item : String -> String -> Entity
+item name description =
+    { id = name
+    , components = display name description
+    }
+
+
+location : String -> String -> Entity
+location name description =
+    { id = name
+    , components = display name description |> addStyle name
+    }
+
+
+character : String -> String -> Entity
+character name description =
+    { id = name
+    , components = display name description
+    }
+
+
+items : List Entity
 items =
-    []
-        ++ ( "photograph"
-           , { name = "worn photograph"
-             , description = "It is too dark, I can't tell what it is of.  But it feels creased and torn around the edges."
-             }
-           )
-        :: ( "lighter"
-           , { name = "lighter"
-             , description = "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
-             }
-           )
-        :: []
+    [ item "worn photograph"
+        "It is too dark, I can't tell what it is of.  But it feels creased and torn around the edges."
+    , item "lighter" "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
+    ]
 
 
-characters : List ( Id, Attributes )
+characters : List Entity
 characters =
-    []
-        ++ ( "wheezy"
-           , { name = "Wheezy"
-             , description = "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
-             }
-           )
-        :: []
+    [ item "Wheezy" "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
+    ]
 
 
-locations : List ( Id, Attributes )
+locations : List Entity
 locations =
-    []
-        ++ ( "darkness1"
-           , { name = "darkness"
-             , description = "Will this darkness go on for ever?  How can I find my way without any light?"
-             }
-           )
-        :: []
+    [ item "darkness" "Will this darkness go on for ever?  How can I find my way without any light?"
+    ]
 
 
 

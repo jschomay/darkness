@@ -6,6 +6,7 @@ import Story.Rules exposing (..)
 import Html exposing (..)
 import Theme.Layout
 import ClientTypes exposing (..)
+import Components exposing (..)
 import Dict exposing (Dict)
 import Task
 import Hypermedia exposing (parse)
@@ -31,9 +32,18 @@ main =
         }
 
 
-stripAttributes : List ( Id, Attributes ) -> List Id
-stripAttributes =
-    List.map Tuple.first
+getIds : List Entity -> List Id
+getIds =
+    List.map .id
+
+
+findEntity : Id -> Maybe Entity
+findEntity id =
+    let
+        interactables =
+            items ++ locations ++ characters
+    in
+        List.head <| List.filter (.id >> (==) id) interactables
 
 
 pluckRules : Engine.Rules
@@ -78,18 +88,18 @@ init =
     ( { engineModel =
             Engine.init
                 { manifest =
-                    { items = stripAttributes items
-                    , locations = stripAttributes locations
-                    , characters = stripAttributes characters
+                    { items = getIds items
+                    , locations = getIds locations
+                    , characters = getIds characters
                     }
                 , rules = pluckRules
-                , startingLocation = "darkness1"
+                , startingLocation = "darkness"
                 , startingScene = "intro"
                 , setup = []
                 }
       , loaded = False
       , storyLine =
-            [ "\"It is in the face of [darkness1], that we remember the importance of light.\"" ]
+            [ "\"It is in the face of [darkness], that we remember the importance of light.\"" ]
       , content = pluckContent
       }
     , Cmd.none
@@ -115,8 +125,10 @@ update msg model =
 
                         Nothing ->
                             Maybe.withDefault
-                                ("<Error, could not find display information for interactable id \"" ++ interactableId ++ "\">")
-                                (Maybe.map .description <| getAttributes interactableId)
+                                ("<Error, Couldn't find entity from id: \"" ++ interactableId ++ "\">")
+                            <|
+                                Maybe.map (.description << getDisplay) <|
+                                    findEntity interactableId
 
                 updateNarrative =
                     if Engine.getCurrentScene model.engineModel == Engine.getCurrentScene newEngineModel then
@@ -173,25 +185,21 @@ updateContent =
         (Maybe.map >> Maybe.map) nextOrStay
 
 
-getAttributes : Id -> Maybe Attributes
-getAttributes id =
-    Dict.get id interactables
-
-
-interactables : Dict Id Attributes
+interactables : Dict Id String
 interactables =
-    Dict.fromList (items ++ locations ++ characters)
+    List.map
+        (\({ id } as entity) ->
+            ( id, .name <| getDisplay entity )
+        )
+        (items ++ locations ++ characters)
+        |> Dict.fromList
 
 
 view :
     Model
     -> Html ClientTypes.Msg
 view model =
-    let
-        display =
-            Dict.map (always .name) interactables
-    in
-        Theme.Layout.view (Engine.getCurrentScene model.engineModel) <|
-            List.map
-                (Hypermedia.parseMultiLine Interact display)
-                model.storyLine
+    Theme.Layout.view (Engine.getCurrentScene model.engineModel) <|
+        List.map
+            (Hypermedia.parseMultiLine Interact interactables)
+            model.storyLine
