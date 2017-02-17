@@ -6,7 +6,7 @@ import ClientTypes exposing (..)
 
 rulesData : List (RuleData Engine.Rule)
 rulesData =
-    List.concat [ intro, alone ]
+    List.concat [ intro, alone, wheezy ]
 
 
 intro : List (RuleData Engine.Rule)
@@ -20,7 +20,9 @@ intro =
                 , moveItemToInventory "worn photograph"
                 , moveItemToInventory "lighter"
                 ]
-           , narrative = [ """I am alone.  Alone in this overwhelming [darkness].  I wave my hand in front of my eyes, but I see nothing.
+           , narrative = [ """I am alone.
+
+Alone in this overwhelming [darkness].  I wave my hand in front of my eyes, but I see nothing.
 
 I have some things with me.  A [worn photograph].  I don't even remember what of.  A [lighter].
            """ ]
@@ -37,8 +39,11 @@ alone =
                 [ beenThereDoneThat "lighter"
                 , currentSceneIs "alone"
                 ]
-           , changes = [ loadScene "Wheezy" ]
-           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nSlowly... I don't want to run into anything or fall.  Here is a wall.  It is rough and jagged, but I can follow it.  Where does it go?  Is there a way out?  What if I--\n\nWait.  I hear something.  A low, raspy breathing.  [Wheezy|Someone or something] is in here with me.\n\nIt's coming closer.  What do I do?  Maybe I can [hide]." ]
+           , changes =
+                [ loadScene "Wheezy"
+                , moveCharacterToLocation "Wheezy" "darkness"
+                ]
+           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nHere is a wall, rough and jagged, but I can follow it.  The air is still and dry.\n\nWait.  I hear something.  A low, raspy breathing.  [Wheezy|Someone or something] is in here with me.\n\nIt's coming closer.  What do I do?  Maybe I can [hiding spot|hide]." ]
            }
         :: []
 
@@ -46,6 +51,29 @@ alone =
 wheezy : List (RuleData Engine.Rule)
 wheezy =
     []
+        ++ { summary = "hide from noise"
+           , interaction = withLocation "hiding spot"
+           , conditions =
+                [ characterIsInLocation "Wheezy" "darkness"
+                , currentSceneIs "Wheezy"
+                ]
+           , changes = [ moveTo "hiding spot" ]
+           , narrative = [ "I feel a crack in the wall here, maybe I can squeeze my body into it.  Hopefully what ever it is won't detect me.\n\nIt's getting closer.  It stopped just in front of me.\n\nA deep, raspy voice calls out, \"Hello?  Is someone there? I don't want any trouble.\"" ]
+           }
+        :: { summary = "wheezy attacks you"
+           , interaction = withLocation "hiding spot"
+           , conditions =
+                [ currentLocationIs "hiding spot"
+                , currentSceneIs "Wheezy"
+                ]
+           , changes =
+                [ moveTo "darkness"
+                , moveCharacterOffScreen "Wheezy"
+                , loadScene "intro"
+                ]
+           , narrative = [ "I hold my breath.  Maybe he will pass.  I hear a scuffle and he calls out again, \"I don't trust someone I can't see.\"\n\nSuddenly I feel a sharp blow graze my cheek.  I jerk back, slamming my head into the hard wall behind me.\n\nA dazzling shower of stars dance across my vision, giving a glorious moment of respite from the ever-present [darkness], even as I slip into unconsciousness." ]
+           }
+        :: []
 
 
 

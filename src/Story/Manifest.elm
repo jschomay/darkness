@@ -45,13 +45,14 @@ items =
 
 characters : List Entity
 characters =
-    [ item "Wheezy" "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
+    [ character "Wheezy" "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
     ]
 
 
 locations : List Entity
 locations =
-    [ item "darkness" "Will this darkness go on for ever?  How can I find my way without any light?"
+    [ location "darkness" "Will this darkness go on for ever?  How can I find my way without any light?"
+    , location "hiding spot" "I can't see anything at all.  Hopefully no one can see me."
     ]
 
 
