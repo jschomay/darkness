@@ -8,16 +8,40 @@ import ClientTypes exposing (..)
 
 view :
     String
+    -> String
     -> List (List (Html Msg))
     -> Html Msg
-view currentScene storyLine =
+view currentSceneId currentSceneTitle storyLine =
     let
         storyLi i story =
             let
                 numLines =
                     List.length storyLine
             in
-                ( currentScene ++ (toString i), li [ class "Storyline__Item" ] story )
+                ( currentSceneId ++ (toString i)
+                , li
+                    [ class "Storyline__Item"
+                    , style
+                        [ ( "opacity"
+                          , toString <|
+                                Basics.max
+                                    0.15
+                                    (toFloat (i + 1) / (toFloat <| List.length storyLine))
+                          )
+                        ]
+                    ]
+                    story
+                )
+
+        sceneTitle =
+            (if currentSceneTitle /= "" then
+                [ h3 [ class "Storyline__SceneTitle" ] [ text <| "\"" ++ currentSceneTitle ++ "\"" ] ]
+             else
+                []
+            )
     in
-        Html.Keyed.ol [ id "Storyline", class "Storyline" ]
-            (List.indexedMap storyLi storyLine)
+        div [ id "Storyline", class "Storyline" ] <|
+            sceneTitle
+                ++ [ Html.Keyed.ol []
+                        (List.indexedMap storyLi storyLine)
+                   ]

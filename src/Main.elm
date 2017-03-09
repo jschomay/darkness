@@ -41,7 +41,7 @@ findEntity : Id -> Maybe Entity
 findEntity id =
     let
         interactables =
-            items ++ locations ++ characters
+            items ++ locations ++ characters ++ scenes
     in
         List.head <| List.filter (.id >> (==) id) interactables
 
@@ -194,21 +194,28 @@ updateContent =
         (Maybe.map >> Maybe.map) nextOrStay
 
 
-interactables : Dict Id String
-interactables =
-    List.map
-        (\({ id } as entity) ->
-            ( id, .name <| getDisplay entity )
-        )
-        (items ++ locations ++ characters)
-        |> Dict.fromList
-
-
 view :
     Model
     -> Html ClientTypes.Msg
 view model =
-    Theme.Layout.view (Engine.getCurrentScene model.engineModel) <|
-        List.map
-            (Hypermedia.parseMultiLine Interact interactables)
-            model.storyLine
+    let
+        currentSceneId =
+            (Engine.getCurrentScene model.engineModel)
+
+        currentSceneTitle =
+            findEntity currentSceneId
+                |> Maybe.map (getDisplay >> .name)
+                |> Maybe.withDefault ""
+
+        interactables =
+            List.map
+                (\({ id } as entity) ->
+                    ( id, .name <| getDisplay entity )
+                )
+                (items ++ locations ++ characters)
+                |> Dict.fromList
+    in
+        Theme.Layout.view currentSceneId currentSceneTitle <|
+            List.map
+                (Hypermedia.parseMultiLine Interact interactables)
+                model.storyLine

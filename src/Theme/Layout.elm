@@ -8,11 +8,12 @@ import ClientTypes exposing (..)
 
 view :
     String
+    -> String
     -> List (List (Html Msg))
     -> Html Msg
-view currentScene storyLine =
-    div [ class <| "Game Game--" ++ currentScene ]
+view currentSceneId currentSceneTitle storyLine =
+    div [ class <| "Game Game--" ++ currentSceneId ]
         [ div [ class "Layout" ]
-            [ Theme.Storyline.view currentScene storyLine
+            [ Theme.Storyline.view currentSceneId currentSceneTitle storyLine
             ]
         ]
