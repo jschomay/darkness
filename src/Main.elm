@@ -150,18 +150,19 @@ update msg model =
                         |> Maybe.map (\id -> Dict.update id updateContent model.content)
                         |> Maybe.withDefault model.content
 
-                maybeGetOffsetTop =
+                handleScrolling =
                     if isNewScene then
-                        getNewItemOffsetTop ()
+                        prepScroll ()
                     else
-                        Cmd.none
+                        Task.attempt (always NoOp) <|
+                            Task.mapError identity (Dom.toY "scroll-container" <| 0)
             in
                 ( { model
                     | engineModel = newEngineModel
                     , storyLine = updateNarrative
                     , content = newContent
                   }
-                , maybeGetOffsetTop
+                , handleScrolling
                 )
 
         Loaded ->
@@ -191,7 +192,7 @@ update msg model =
                 ( { model | animationTime = model.animationTime + dt }, doScroll )
 
 
-port getNewItemOffsetTop : () -> Cmd msg
+port prepScroll : () -> Cmd msg
 
 
 port loaded : (Bool -> msg) -> Sub msg

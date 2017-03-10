@@ -8,7 +8,7 @@ var Elm = require( './Main' );
 var app = Elm.Main.fullscreen();
 
 app.ports.loaded.send(true);
-app.ports.getNewItemOffsetTop.subscribe(function() {
+app.ports.prepScroll.subscribe(function() {
   requestAnimationFrame(function() {
     var offset = document.querySelector('.Storyline__Item:last-child').offsetTop;
     var scrollTop = document.querySelector('#scroll-container').scrollTop;
