@@ -6,6 +6,7 @@ import Dict exposing (Dict)
 type Msg
     = Interact Id
     | Loaded
+    | ReadyToScroll Float
     | NoOp
 
 

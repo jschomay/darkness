@@ -144,10 +144,9 @@ update msg model =
                         |> Maybe.map (\id -> Dict.update id updateContent model.content)
                         |> Maybe.withDefault model.content
 
-                maybeScroll =
+                maybeGetOffsetTop =
                     if isNewScene then
-                        Task.attempt (always NoOp) <|
-                            Task.mapError identity (Dom.toBottom "scroll-container")
+                        getNewItemOffsetTop ()
                     else
                         Cmd.none
             in
@@ -156,7 +155,7 @@ update msg model =
                     , storyLine = updateNarrative
                     , content = newContent
                   }
-                , maybeScroll
+                , maybeGetOffsetTop
                 )
 
         Loaded ->
@@ -167,13 +166,30 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        ReadyToScroll offset ->
+            let
+                scroll =
+                    Task.attempt (always NoOp) <|
+                        Task.mapError identity (Dom.toY "scroll-container" <| offset - 100)
+            in
+                ( model, scroll )
+
+
+port getNewItemOffsetTop : () -> Cmd msg
+
 
 port loaded : (Bool -> msg) -> Sub msg
 
 
+port readyToScroll : (Float -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub ClientTypes.Msg
 subscriptions model =
-    loaded <| always Loaded
+    Sub.batch
+        [ loaded <| always Loaded
+        , readyToScroll ReadyToScroll
+        ]
 
 
 getNarrative : Dict String (Maybe (Zipper String)) -> Maybe String -> Maybe String

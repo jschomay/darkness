@@ -8,3 +8,9 @@ var Elm = require( './Main' );
 var app = Elm.Main.fullscreen();
 
 app.ports.loaded.send(true);
+app.ports.getNewItemOffsetTop.subscribe(function() {
+  requestAnimationFrame(function() {
+    var offset = document.querySelector('.Storyline__Item:last-child').offsetTop;
+    app.ports.readyToScroll.send(offset);
+  });
+});
