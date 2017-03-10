@@ -76,7 +76,7 @@ p {
 .Storyline__Item {
   opacity: 0;
   margin-bottom: 100px;
-  animation: fadeIn 3s ease-in-out forwards;
+  animation: fadeIn 3s ease-in forwards;
 }
 
 .Storyline__Item:last-child {

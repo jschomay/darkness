@@ -11,6 +11,7 @@ app.ports.loaded.send(true);
 app.ports.getNewItemOffsetTop.subscribe(function() {
   requestAnimationFrame(function() {
     var offset = document.querySelector('.Storyline__Item:last-child').offsetTop;
-    app.ports.readyToScroll.send(offset);
+    var scrollTop = document.querySelector('#scroll-container').scrollTop;
+    app.ports.readyToScroll.send({offset: offset, scrollTop: scrollTop});
   });
 });

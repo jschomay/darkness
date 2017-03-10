@@ -9,6 +9,8 @@ import ClientTypes exposing (..)
 import Components exposing (..)
 import Dict exposing (Dict)
 import Task
+import AnimationFrame
+import Animation exposing (Animation)
 import Hypermedia exposing (parse)
 import Dom.Scroll as Dom
 import List.Zipper as Zipper exposing (Zipper)
@@ -19,6 +21,8 @@ type alias Model =
     , loaded : Bool
     , storyLine : List String
     , content : Dict String (Maybe (Zipper String))
+    , animationTime : Float
+    , animation : Animation
     }
 
 
@@ -101,6 +105,8 @@ init =
       , storyLine =
             [ "\"It is in the face of [darkness], that we remember the importance of light.\"" ]
       , content = pluckContent
+      , animationTime = 0
+      , animation = Animation.static 0 |> Animation.duration 400
       }
     , Cmd.none
     )
@@ -166,13 +172,23 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        ReadyToScroll offset ->
+        ReadyToScroll { offset, scrollTop } ->
+            let
+                startedAnimation =
+                    Animation.retarget model.animationTime (offset - 100) model.animation |> Animation.from scrollTop
+            in
+                ( { model | animation = startedAnimation }, Cmd.none )
+
+        Tick dt ->
             let
                 scroll =
+                    Animation.animate model.animationTime model.animation
+
+                doScroll =
                     Task.attempt (always NoOp) <|
-                        Task.mapError identity (Dom.toY "scroll-container" <| offset - 100)
+                        Task.mapError identity (Dom.toY "scroll-container" <| scroll)
             in
-                ( model, scroll )
+                ( { model | animationTime = model.animationTime + dt }, doScroll )
 
 
 port getNewItemOffsetTop : () -> Cmd msg
@@ -181,7 +197,7 @@ port getNewItemOffsetTop : () -> Cmd msg
 port loaded : (Bool -> msg) -> Sub msg
 
 
-port readyToScroll : (Float -> msg) -> Sub msg
+port readyToScroll : ({ offset : Float, scrollTop : Float } -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub ClientTypes.Msg
@@ -189,6 +205,10 @@ subscriptions model =
     Sub.batch
         [ loaded <| always Loaded
         , readyToScroll ReadyToScroll
+        , if not <| Animation.isDone model.animationTime model.animation then
+            AnimationFrame.diffs Tick
+          else
+            Sub.none
         ]
 
 
@@ -210,9 +230,7 @@ updateContent =
         (Maybe.map >> Maybe.map) nextOrStay
 
 
-view :
-    Model
-    -> Html ClientTypes.Msg
+view : Model -> Html ClientTypes.Msg
 view model =
     let
         currentSceneId =
