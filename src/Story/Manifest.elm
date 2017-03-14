@@ -47,7 +47,7 @@ items =
     [ item "worn photograph" "I've had this for a very long time."
     , item "lighter" "It is almost empty.  I must use it wisely."
     , item "candle" "Funny how such a simple object can be a such a lifesaver."
-    , item "light" "And God said, \"Let there be light,\" and there was light."
+    , item "breeze" "A fresh breeze can breath new life into a stale room."
     ]
 
 
@@ -61,6 +61,8 @@ locations : List Entity
 locations =
     [ location "darkness" "Will this darkness go on for ever?  How can I find my way without any light?"
     , location "hiding spot" "Who knows what's in there."
+    , location "crack" "By definition, a crack is a place between a rock and a hard place."
+    , location "windy hallway" "The wind rips through the hall."
     ]
 
 
@@ -68,4 +70,5 @@ scenes : List Entity
 scenes =
     [ scene "aloneInTheDark" "Darkness"
     , scene "firstLight" "First Light"
+    , scene "aloneAgain" "Alone Again"
     ]

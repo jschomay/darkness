@@ -11,8 +11,120 @@ rulesData =
         , hidingSpot
         , wornPhotograph
         , lighter
+        , breeze
+        , candle
         , wheezy
+        , crack
         ]
+
+
+
+-- Items
+
+
+wornPhotograph : List (RuleData Engine.Rule)
+wornPhotograph =
+    []
+        ++ { summary = "can't see photo"
+           , interaction = withItem "worn photograph"
+           , conditions = [ currentSceneIs "aloneInTheDark" ]
+           , changes = []
+           , narrative =
+                [ "It is too dark, I can't see it.  It feels creased and torn around the edges.  I wonder what it is of."
+                , "What could it be?"
+                , "I wonder how long I've had this with me."
+                , "I can't see it."
+                ]
+           }
+        :: { summary = "first glimpse"
+           , interaction = withItem "worn photograph"
+           , conditions = [ currentSceneIs "firstLight" ]
+           , changes = []
+           , narrative =
+                [ "I forgot at the photo!  I can see it now.  It is of a woman.  But I don't recognizer her...  She seems familiar.  But I can't remember..."
+                , "Who is she?  Why do I have it?"
+                , "Why can't I remember her?"
+                ]
+           }
+        :: []
+
+
+candle : List (RuleData Engine.Rule)
+candle =
+    []
+        ++ { summary = "burning out"
+           , interaction = withItem "candle"
+           , conditions =
+                [ currentSceneIs "firstLight"
+                , currentLocationIs "darkness"
+                ]
+           , changes = []
+           , narrative =
+                [ "The light is almost magical.  I have already forgot what it was like in absolute darkness.  I certainly don't want to go back to that."
+                , "The wax is dripping down the side.  It is burning down fast."
+                , "I don't know how much longer it will last.  I hope we get out soon."
+                , "It will go out soon."
+                ]
+           }
+        :: []
+
+
+breeze : List (RuleData Engine.Rule)
+breeze =
+    []
+        ++ { summary = "what breeze"
+           , interaction = withItem "breeze"
+           , conditions =
+                [ currentSceneIs "firstLight"
+                , currentLocationIs "darkness"
+                ]
+           , changes = []
+           , narrative =
+                [ "I don't feel any breeze." ]
+           }
+        :: []
+
+
+lighter : List (RuleData Engine.Rule)
+lighter =
+    []
+        ++ { summary = "lighter is almost empty"
+           , interaction = withItem "lighter"
+           , conditions = [ currentSceneIs "aloneInTheDark" ]
+           , changes = []
+           , narrative =
+                [ "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
+                , "I am afraid to waste it."
+                ]
+           }
+        :: { summary = "light Wheezy's candle"
+           , interaction = withItem "lighter"
+           , conditions =
+                [ currentSceneIs "aloneInTheDark"
+                , characterIsInLocation "Wheezy" "darkness"
+                , beenThereDoneThat "Wheezy"
+                ]
+           , changes =
+                [ moveItemToInventory "candle"
+                , loadScene "firstLight"
+                ]
+           , narrative = [ "\"Hold on!  You have a candle?  We can help each other.\"\n\nI flick my lighter and light his candle and a small, glowing sphere of warm light envelopes us.\n\nMy eyes adjust to the light flickering off the glistening cave-like walls, and I get my first glimpse of \"[Wheezy].\"\n\nHe is hunched over, his skin cracked and scarred.  In a way he is repulsive.  But his eyes are friendly, and he seems happy to see me.  Maybe he is just happy to be able to see anything again.  To be honest, so am I." ]
+           }
+        :: { summary = "not while hiding"
+           , interaction = withItem "lighter"
+           , conditions =
+                [ currentSceneIs "aloneInTheDark"
+                , currentLocationIs "hiding spot"
+                ]
+           , changes =
+                []
+           , narrative = [ "I don't want to give myself away!" ]
+           }
+        :: []
+
+
+
+-- Locations
 
 
 darkness : List (RuleData Engine.Rule)
@@ -47,61 +159,6 @@ darkness =
                 ]
            , changes = []
            , narrative = [ "Hopefully it is dark enough he won't see me." ]
-           }
-        :: []
-
-
-wornPhotograph : List (RuleData Engine.Rule)
-wornPhotograph =
-    []
-        ++ { summary = "can't see photo"
-           , interaction = withItem "worn photograph"
-           , conditions = [ currentSceneIs "aloneInTheDark" ]
-           , changes = []
-           , narrative =
-                [ "It is too dark, I can't see it.  It feels creased and torn around the edges.  I wonder what it is of."
-                , "What could it be?"
-                , "I wonder how long I've had this with me."
-                , "I can't see it."
-                ]
-           }
-        :: []
-
-
-lighter : List (RuleData Engine.Rule)
-lighter =
-    []
-        ++ { summary = "lighter is almost empty"
-           , interaction = withItem "lighter"
-           , conditions = [ currentSceneIs "aloneInTheDark" ]
-           , changes = []
-           , narrative =
-                [ "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
-                , "I am afraid to waste it."
-                ]
-           }
-        :: { summary = "light Wheezy's candle"
-           , interaction = withItem "lighter"
-           , conditions =
-                [ currentSceneIs "aloneInTheDark"
-                , characterIsInLocation "Wheezy" "darkness"
-                , beenThereDoneThat "Wheezy"
-                ]
-           , changes =
-                [ moveItemToInventory "candle"
-                , loadScene "firstLight"
-                ]
-           , narrative = [ "\"Hold on!  You have a candle?  We can help each other.\"\n\nI flick my lighter and light his candle and small, glowing sphere of warm light envelopes us.\n\nMy eyes adjust to the light flickering off the glistening cave-like walls, and I get my first glimpse of \"[Wheezy].\"\n\nHe is short and disfigured, with some nasty scars on his face.  But his eyes are friendly, and he seems happy to see me.  Maybe he is just happy to be able to see anything again.  To be honest, so am I." ]
-           }
-        :: { summary = "not while hiding"
-           , interaction = withItem "lighter"
-           , conditions =
-                [ currentSceneIs "aloneInTheDark"
-                , currentLocationIs "hiding spot"
-                ]
-           , changes =
-                []
-           , narrative = [ "I don't want to give myself away!" ]
            }
         :: []
 
@@ -151,20 +208,34 @@ hidingSpot =
         :: []
 
 
+crack : List (RuleData Engine.Rule)
+crack =
+    []
+        ++ { summary = "entering the main chamber"
+           , interaction = withLocation "crack"
+           , conditions =
+                [ currentLocationIs "darkness"
+                , currentSceneIs "firstLight"
+                ]
+           , changes =
+                [ moveTo "windy hallway"
+                , loadScene "aloneAgain"
+                ]
+           , narrative =
+                [ "I squeeze into the crack.  The walls are hard and slimy.  I have to twist my body around to get through, but I manage to crawl out into a larger hallway.  A gust of wind blasts through me and the [candle] goes out!\n\nI am in total darkness again.  The echoing howl of the wind fills the hallway.\n\n\"Wheezy!\"\n\nMy shout bounces off of the wall, but I get no answer.  I'm alone.  Again."
+                ]
+           }
+        :: []
+
+
+
+-- Characters
+
+
 wheezy : List (RuleData Engine.Rule)
 wheezy =
     []
-        ++ { summary = "confront wheezy"
-           , interaction = withCharacter "Wheezy"
-           , conditions =
-                [ currentSceneIs "aloneInTheDark"
-                , characterIsInLocation "Wheezy" "darkness"
-                , notBeenThereDoneThat "Wheezy"
-                ]
-           , changes = [ moveTo "darkness" ]
-           , narrative = [ "I summon my courage.  \"Who's there?\"  My words echo off the hard walls.  The breathing stops.\n\nThen a pinched, wheezy voice answers back.\n\n\"Please, leave me alone.  I have nothing to offer.  I am all out of matches.  All I have is a broken candle stump.  Just let me pass.\"" ]
-           }
-        :: { summary = "before seeing wheezy"
+        ++ { summary = "before seeing wheezy"
            , interaction = withCharacter "Wheezy"
            , conditions =
                 [ currentSceneIs "aloneInTheDark"
@@ -178,27 +249,42 @@ wheezy =
                 , "I better find a way to get his attention before he is gone."
                 ]
            }
+        :: { summary = "confront wheezy"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "aloneInTheDark"
+                , characterIsInLocation "Wheezy" "darkness"
+                , notBeenThereDoneThat "Wheezy"
+                ]
+           , changes = [ moveTo "darkness" ]
+           , narrative = [ "I summon my courage.  \"Who's there?\"  My words echo off the hard walls.  The breathing stops.\n\nThen a pinched, wheezy voice answers back.\n\n\"Please, leave me alone.  I have nothing to offer.  I am all out of matches.  All I have is a broken candle stump.  Just let me pass.\"" ]
+           }
+        :: { summary = "first contact"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "firstLight"
+                , currentLocationIs "darkness"
+                ]
+           , changes = []
+           , narrative =
+                [ "\"Hi... What are you doing down here?  Can you get us out?\"\n\n\"I've been stuck down here for a long time.  Just like you.  But I do know a way out.  We have to hurry, the [candle] won't last long. Follow me.\""
+                , "\"Where are we going?\"\n\n\"We have to find our way to the main chamber.  From there it's not far to the surface.\"\n\n\"How do you know which way goes the main chamber?\"\n\n\"A light [breeze] blows from there, we just go in that direction.  Can you feel it?  It's this way.  Come on.\""
+                , "\"So, what is this place? How did we get here? How do you know about it?\"\n\nWheezy doesn't answer.  He seems to be concentrating on the breeze.  He glances at the candle.  He seems concerned.  Is he lost?  Oh God, we're lost!  Why did I trust this guy?  Maybe I should--\n\n\"Who's the woman in the [worn photograph|photograph]?\""
+                , "\"Hey, we've been here before.  I recognize that rock.  We're going in circles.  We're lost!\"\n\nWheezy pauses and looks around.  He points at a wall.  \"Through there.\"  He hands me the candle.  \"You first.\"\n\n\"What... the [crack] in the wall?\""
+                , "\"Go on.\""
+                , "\"Squeeze through.\""
+                , "\"Go.\""
+                ]
+           }
         :: []
 
 
 
 {-
-   Scenes:
-   - aloneInTheDark
-   - firstLight
--}
-{-
 
-     NOTES
+   NOTES
 
-     What if I only change scenes at sequence ends?  The text stays on longer, but the transition is more noticeable.  I have to handle every case.  I lose scene granularity, which may be harder later.
+   -- after candle talk to wheezy (how long have you been down here?) to bring up photograph or [out] to start walking, but going in circles, argue, wind, candle goes out.  Look for shelter, but get separated.
 
-     would be better to click lighter instead of making candle clickable, but it isn't on screen...
-
-     -- how to get photograph back in? is it listed somewhere, or do I need to reference it, like Wheezy asks who is in the photograph and you look and don't remember
-
-     -- after candle talk to wheezy (how long have you been down here?) to bring up photograph or [out] to start walking, but going in circles, argue, wind, candle goes out.  Look for shelter, but get separated.
-
-   in general, is it too railroaded? does it lose the main properties of the engine?  does it matter?
 
 -}
