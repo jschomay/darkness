@@ -15,6 +15,9 @@ rulesData =
         , candle
         , wheezy
         , crack
+        , mainChamber
+        , tunnels
+        , limpy
         ]
 
 
@@ -66,6 +69,19 @@ candle =
                 , "It will go out soon."
                 ]
            }
+        :: { summary = "trying to relight"
+           , interaction = withItem "candle"
+           , conditions =
+                [ currentSceneIs "aloneAgain"
+                , currentLocationIs "windy hallway"
+                ]
+           , changes = []
+           , narrative =
+                [ "I quickly light the candle again, but the wind blows it out a second later."
+                , "I'll never light it in here.  I have to find someplace [main chamber|less windy]."
+                , "I'll have to leave if I want to light it."
+                ]
+           }
         :: []
 
 
@@ -93,7 +109,7 @@ lighter =
            , conditions = [ currentSceneIs "aloneInTheDark" ]
            , changes = []
            , narrative =
-                [ "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness."
+                [ "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness.  It shudders and goes out."
                 , "I am afraid to waste it."
                 ]
            }
@@ -138,7 +154,7 @@ darkness =
                 , moveItemToInventory "worn photograph"
                 , moveItemToInventory "lighter"
                 ]
-           , narrative = [ "I am alone.\n\n Alone in this overwhelming [darkness].  I wave my hand in front of my eyes, but I see nothing.\n\n  I have something in my pocket.  A [worn photograph].  I don't remember what of.  And a [lighter].  " ]
+           , narrative = [ "I am alone.\n\n Alone in this overwhelming [darkness].  I wave my hand in front of my eyes, but I see nothing.  I have to find a way out.\n\n  I have something in my pocket.  It feels like a [worn photograph|photograph], but I don't remember why I have it.  And a [lighter].  " ]
            }
         :: { summary = "stumble through darkness to explore"
            , interaction = withLocation "darkness"
@@ -176,7 +192,7 @@ hidingSpot =
                 ]
            , changes = [ moveTo "hiding spot" ]
            , narrative =
-                [ "I feel a crack in the wall here, maybe I can squeeze my body into it.  Hopefully what ever it is won't detect me.\n\nIt's getting closer.  It stopped just in front of me.\n\nIt calls out, \"Hello?  Is someone there? I don't want any trouble.\""
+                [ "I feel a crack in the wall here, maybe I can squeeze my body into it.  Hopefully what ever it is won't detect me.\n\nIt's getting closer.  It stopped just in front of me.\n\nIt calls out, \"Hello?  Is someone there? I don't want any trouble.\"\n\nIt's another person, like me. Maybe I should confront him.  Or if I keep hiding, maybe he will just go away."
                 ]
            }
         :: { summary = "after giving yourself away"
@@ -222,8 +238,45 @@ crack =
                 , loadScene "aloneAgain"
                 ]
            , narrative =
-                [ "I squeeze into the crack.  The walls are hard and slimy.  I have to twist my body around to get through, but I manage to crawl out into a larger hallway.  A gust of wind blasts through me and the [candle] goes out!\n\nI am in total darkness again.  The echoing howl of the wind fills the hallway.\n\n\"Wheezy!\"\n\nMy shout bounces off of the wall, but I get no answer.  I'm alone.  Again."
+                [ "I squeeze into the crack.  The walls are hard and slimy.  I have to twist my body around to get through, but I manage to crawl out into a larger hallway.  I turn around to light the way for [Wheezy], and a blast of wind shoots through the hall and blows out the [candle]!\n\nI am in total darkness again.  \n\n\"Wheezy!\"\n\nMy shout bounces off of the walls, but I get no answer, just the echoing howls of wind.  I'm alone.  Again."
                 ]
+           }
+        :: []
+
+
+mainChamber : List (RuleData Engine.Rule)
+mainChamber =
+    []
+        ++ { summary = "relight candle"
+           , interaction = withLocation "main chamber"
+           , conditions =
+                [ currentSceneIs "aloneAgain"
+                , currentLocationIs "windy hallway"
+                ]
+           , changes =
+                [ loadScene "almostThere"
+                , moveTo "main chamber"
+                ]
+           , narrative = [ "I stumble down the hall, feeling my way, into the wind.  If Wheezy was right, maybe the way out is not far.\n\nThe hallway leads to an open chamber.  It is less windy here, and I manage to relight the [candle].  I'm so glad to have light again.\n\nThis chamber is larger than I thought.  The light from the candle barely reaches the ceiling.  I see three, no four, other [tunnels] leading out from here, besides the way I came in.  Which one do I take?" ]
+           }
+        :: []
+
+
+tunnels : List (RuleData Engine.Rule)
+tunnels =
+    []
+        ++ { summary = "limpy's proposition"
+           , interaction = withLocation "tunnels"
+           , conditions =
+                [ currentSceneIs "almostThere"
+                , currentLocationIs "main chamber"
+                , characterIsNotInLocation "Limpy" "main chamber"
+                , itemIsInInventory "candle"
+                ]
+           , changes =
+                [ moveCharacterToLocation "Limpy" "main chamber"
+                ]
+           , narrative = [ "One of these must lead out.  But which one?  I wish Wheezy was here, he would know.  I guess I'll try this one--\n\nI hear something!  Footsteps.  Wheezy!  He found me.\n\nA man emerges from the second tunnel -- he's not Wheezy.  He is tall and thin with a hardened face, creased with determination and... malice?  He comes right at me.  He walks with a limp.\n\n\"You!  I see your light.  You give to me.\"\n\nNo way I'm giving him my candle.  I could outrun him if I take this first tunnel.\n\nHe tries again, \"You give me your candle.  I find my friends.  They have many candles.  We come back and give you many candles.\"\n\nA deal?  Maybe I should take it.  My candle won't last long.  Maybe \"[Limpy]\" knows the way out.  I'm just not sure I trust him." ]
            }
         :: []
 
@@ -276,15 +329,46 @@ wheezy =
                 , "\"Go.\""
                 ]
            }
+        :: { summary = "losing wheezy"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "aloneAgain"
+                , characterIsInLocation "Wheezy" "darkness"
+                , currentLocationIs "windy hallway"
+                ]
+           , changes = []
+           , narrative =
+                [ "I call out for him again, but there is no answer.  Where is he, he should have been right behind me?"
+                , "Maybe I should try to go back and find him.  I can't find the crack, it was here a moment ago! The wind turned me around, I can't find it!"
+                , "I've lost him."
+                ]
+           }
+        :: []
+
+
+limpy : List (RuleData Engine.Rule)
+limpy =
+    []
+        ++ { summary = "evaluating deal"
+           , interaction = withCharacter "Limpy"
+           , conditions =
+                [ currentSceneIs "almostThere"
+                , characterIsInLocation "Limpy" "main chamber"
+                , currentLocationIs "main chamber"
+                , itemIsInInventory "candle"
+                ]
+           , changes = []
+           , narrative =
+                [ "He glares at me.  I better make a choice fast."
+                , "He's not much for conversation.  He wants my candle."
+                ]
+           }
         :: []
 
 
 
 {-
-
-   NOTES
-
-   -- after candle talk to wheezy (how long have you been down here?) to bring up photograph or [out] to start walking, but going in circles, argue, wind, candle goes out.  Look for shelter, but get separated.
-
+   Next:
+    - after Limpy's deal, path for giving candle or running into tunnels
 
 -}

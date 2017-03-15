@@ -54,6 +54,7 @@ items =
 characters : List Entity
 characters =
     [ character "Wheezy" "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
+    , character "Limpy" "Full of tenacity, he's going to do what he needs to do."
     ]
 
 
@@ -63,6 +64,8 @@ locations =
     , location "hiding spot" "Who knows what's in there."
     , location "crack" "By definition, a crack is a place between a rock and a hard place."
     , location "windy hallway" "The wind rips through the hall."
+    , location "main chamber" "At one time this must have been used for some purpose, I don't think anyone would want to come here any more."
+    , location "tunnels" "Where do they all go?"
     ]
 
 
@@ -71,4 +74,5 @@ scenes =
     [ scene "aloneInTheDark" "Darkness"
     , scene "firstLight" "First Light"
     , scene "aloneAgain" "Alone Again"
+    , scene "almostThere" "Almost There"
     ]
