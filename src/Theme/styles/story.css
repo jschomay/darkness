@@ -28,3 +28,19 @@
 .Game--almostThere .u-interactable {
   color: rgb(190, 190, 190);
 }
+
+.Game--darkestPart {
+  background-color: rgb(20, 20, 20);
+  color: rgb(100, 100, 100);
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+}
+
+.Game--light {
+  background-color: rgb(220, 220, 220);
+  color: rgb(170, 170, 170);
+  text-shadow: none;
+}
+.Game--light .u-interactable {
+  color: rgb(160, 160, 160);
+  text-shadow: none;
+}

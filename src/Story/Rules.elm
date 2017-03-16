@@ -82,6 +82,22 @@ candle =
                 , "I'll have to leave if I want to light it."
                 ]
            }
+        :: { summary = "give to Limpy"
+           , interaction = withItem "candle"
+           , conditions =
+                [ currentSceneIs "almostThere"
+                , itemIsInInventory "candle"
+                , characterIsInLocation "Limpy" "main chamber"
+                ]
+           , changes =
+                [ moveItemOffScreen "candle"
+                , moveCharacterOffScreen "Limpy"
+                , loadScene "darkestPart"
+                ]
+           , narrative =
+                [ "I guess I'll give it to him.  Hopefully if I help him he'll help me.\n\nI hold the candle out.  He snatches it, then turns back down the way he came.  I watch the glow recede down the tunnel.  Everything returns to [darkness]."
+                ]
+           }
         :: []
 
 
@@ -175,6 +191,25 @@ darkness =
                 ]
            , changes = []
            , narrative = [ "Hopefully it is dark enough he won't see me." ]
+           }
+        :: { summary = "waiting for Limpy to return"
+           , interaction = withLocation "darkness"
+           , conditions =
+                [ currentSceneIs "darkestPart"
+                , itemIsNotInInventory "candle"
+                , characterIsNotInLocation "Limpy" "main chamber"
+                ]
+           , changes = [ moveItemToInventory "candles" ]
+           , narrative =
+                [ "The darkness is so complete.  I would never know that I was in this large chamber.  If there was a big sign pointing \"Exit, this way\" I wouldn't even know.  I hope giving up my candle wasn't a big mistake."
+                , "How long will he be gone?  I hope he comes back soon."
+                , "What if he doesn't come back?  How long should I sit here?  I still have my lighter, maybe that is enough.  I give it a flick.  The flame is so tiny.  It can't even see the tunnels.  I have no choice, I have to wait."
+                , "How long has it been?  Did he forget about me?  I bet he never intended to come back.  He just wanted my candle, and I let him have it.  I'm so stupid!"
+                , "I'll never get out.  I'll never know who is in the photo.  I'll never see the light again.  What if I die here?"
+                , "I have to do something.  One of those tunnels goes out, I know it.  I might wander around in circles, but it's better than staying here!  Were they this way?\n\nI think I can hear the wind.  No, it's water.  No, it's not that either, it's... footsteps!\n\nI see the faintest glow now.  Yes, it's getting brighter.  It's Limpy.  He came back!  He wasn't lying.  And he has some friends with him, about ten other people, each with a candle.  How many other people are down here?\n\nLimpy comes up to me.  His face is still hard, but I realize it is just from hardship.  \"For you.\"  He hands me his candle, plus three more from the others.  \"That way [tunnels|out].\"  Without another word he leads his group away through a different tunnel and silence returns, but now I can see my way."
+                , "I don't need to worry about the darkness now.  And if Limpy is right, I won't be stuck here much longer."
+                , "I can't wait to get out of this darkness."
+                ]
            }
         :: []
 
@@ -276,7 +311,19 @@ tunnels =
            , changes =
                 [ moveCharacterToLocation "Limpy" "main chamber"
                 ]
-           , narrative = [ "One of these must lead out.  But which one?  I wish Wheezy was here, he would know.  I guess I'll try this one--\n\nI hear something!  Footsteps.  Wheezy!  He found me.\n\nA man emerges from the second tunnel -- he's not Wheezy.  He is tall and thin with a hardened face, creased with determination and... malice?  He comes right at me.  He walks with a limp.\n\n\"You!  I see your light.  You give to me.\"\n\nNo way I'm giving him my candle.  I could outrun him if I take this first tunnel.\n\nHe tries again, \"You give me your candle.  I find my friends.  They have many candles.  We come back and give you many candles.\"\n\nA deal?  Maybe I should take it.  My candle won't last long.  Maybe \"[Limpy]\" knows the way out.  I'm just not sure I trust him." ]
+           , narrative = [ "One of these must lead out.  But which one?  I wish Wheezy was here, he would know.  I guess I'll try this one--\n\nI hear something!  Footsteps.  Wheezy!  He found me.\n\nA man emerges from the second tunnel -- but he's not Wheezy.  He is tall and thin with a hardened face, creased with determination and... malice?  He comes right at me.  He walks with a limp.\n\n\"You!  I see your light.  You give to me.\"\n\nNo way I'm giving him my candle.  I could outrun him if I take this first tunnel.\n\nHe tries again, \"You give me your candle.  I find my friends.  They have many candles.  We come back and give you many candles.\"\n\nA deal?  Maybe I should take it.  My candle won't last long.  Maybe \"[Limpy]\" knows the way out.  I'm just not sure I trust him." ]
+           }
+        :: { summary = "the way out"
+           , interaction = withLocation "tunnels"
+           , conditions =
+                [ currentSceneIs "darkestPart"
+                , itemIsInInventory "candles"
+                ]
+           , changes =
+                [ moveTo "field"
+                , loadScene "light"
+                ]
+           , narrative = [ "I take the tunnel Limpy indicated.  It twists around for a while, ending in a staircase that leads up to sealed door.  I unlatch the door and push it open a crack.\n\nBright, white [light] pours in.  I throw the door open, absolutely blinded by the radiance, but I love it.  I force my eyes open, burning my retinas.  I can literally feel the light on my skin.  I made it.  I made it out.  I found the light." ]
            }
         :: []
 
@@ -369,6 +416,8 @@ limpy =
 
 {-
    Next:
-    - after Limpy's deal, path for giving candle or running into tunnels
+    - the path of running away from Limpy
+    - light - after my eyes adjust, I realize I am in the middle of field.  The wild grass stretches in all directions to the horizon.  The door behind me leading back down into the [darkness] is carved into a small rocky hill.  I can see a clump of [trees] far in the distance.  As bright as it is, I realize it is actually an overcast day, making everything a pale shade of gray.
+    - get the photo in there somehow
 
 -}
