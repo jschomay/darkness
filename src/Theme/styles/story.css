@@ -1,39 +1,18 @@
-.Game--intro {
+.Game--intro, .Game--aloneAgain, .Game--darkestPart {
   background-color: rgb(20, 20, 20);
   color: rgb(100, 100, 100);
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
 }
 
-.Game--firstLight {
+.Game--firstLight, .Game--almostThere, .Game--onTheRun {
   background-color: rgb(50, 50, 50);
   color: rgb(140, 140, 140);
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.25);
 }
-.Game--firstLight .u-interactable {
+.Game--firstLight .u-interactable, .Game--almostThere .u-interactable, .Game--onTheRun .u-interactable {
   color: rgb(190, 190, 190);
 }
 
-
-.Game--aloneAgain {
-  background-color: rgb(20, 20, 20);
-  color: rgb(100, 100, 100);
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-}
-
-.Game--almostThere {
-  background-color: rgb(50, 50, 50);
-  color: rgb(140, 140, 140);
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.25);
-}
-.Game--almostThere .u-interactable {
-  color: rgb(190, 190, 190);
-}
-
-.Game--darkestPart {
-  background-color: rgb(20, 20, 20);
-  color: rgb(100, 100, 100);
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-}
 
 .Game--light {
   background-color: rgb(220, 220, 220);

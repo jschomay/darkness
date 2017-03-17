@@ -50,6 +50,8 @@ items =
     , item "candles" "Each candle is a promise of life."
     , item "breeze" "A fresh breeze can breath new life into a stale room."
     , item "light" "It does nothing more than stimulate receptors on the back of our eyes, but for us it creates the entire world."
+    , item "exitDoor" "This is the barrier between light and dark."
+    , item "trees" "A peaceful place."
     ]
 
 
@@ -68,6 +70,7 @@ locations =
     , location "windy hallway" "The wind rips through the hall."
     , location "main chamber" "At one time this must have been used for some purpose, I don't think anyone would want to come here any more."
     , location "tunnels" "Where do they all go?"
+    , location "exit" "I've never been happier to find the exit."
     , location "field" "A simple landscape, but it is beautiful."
     ]
 
@@ -79,5 +82,6 @@ scenes =
     , scene "aloneAgain" "Alone Again"
     , scene "almostThere" "Almost There"
     , scene "darkestPart" "The darkest part of the night is just before dawn"
+    , scene "onTheRun" "On the run"
     , scene "light" "Light"
     ]
