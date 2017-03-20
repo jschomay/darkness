@@ -21,6 +21,8 @@ rulesData =
         , limpy
         , exitDoor
         , light
+        , hill
+        , horizon
         ]
 
 
@@ -50,6 +52,18 @@ wornPhotograph =
                 [ "I forgot at the photo!  I can see it now.  It is of a woman.  But I don't recognizer her...  She seems familiar.  But I can't remember..."
                 , "Who is she?  Why do I have it?"
                 , "Why can't I remember her?"
+                ]
+           }
+        :: { summary = "remembering"
+           , interaction = withItem "worn photograph"
+           , conditions =
+                [ currentSceneIs "light"
+                , currentLocationIs "field"
+                ]
+           , changes = []
+           , narrative =
+                [ "She must be out there somewhere.  Maybe I can find her."
+                , "I miss her."
                 ]
            }
         :: []
@@ -191,6 +205,57 @@ exitDoor =
         :: []
 
 
+hill : List (RuleData Engine.Rule)
+hill =
+    []
+        ++ { summary = "getting a better vantage point"
+           , interaction = withItem "hill"
+           , conditions =
+                [ currentSceneIs "light"
+                , currentLocationIs "field"
+                , beenThereDoneThat "horizon"
+                ]
+           , changes =
+                [ moveCharacterToLocation "raiders" "field" ]
+           , narrative =
+                [ "I climb the rocky hill to get a better vantage point.  I still don't see much.  It looks like a [forest] is in the distance that way.  I can see something else in the distance over here.  It looks like... [raiders|people] approaching."
+                , "I can't stand here all day."
+                ]
+           }
+        :: []
+
+
+horizon : List (RuleData Engine.Rule)
+horizon =
+    []
+        ++ { summary = "where to from here"
+           , interaction = withItem "horizon"
+           , conditions =
+                [ currentSceneIs "light"
+                , currentLocationIs "field"
+                ]
+           , changes = []
+           , narrative =
+                [ "Maybe I can see a city or village or something.  But all I see is grass in every direction."
+                , "There has to be something out there, but which way do I go?"
+                , "I wish I could see further."
+                ]
+           }
+        :: { summary = "nothing more to see"
+           , interaction = withItem "horizon"
+           , conditions =
+                [ currentSceneIs "light"
+                , currentLocationIs "field"
+                , characterIsInLocation "raiders" "field"
+                ]
+           , changes = []
+           , narrative =
+                [ "I don't see anything else."
+                ]
+           }
+        :: []
+
+
 light : List (RuleData Engine.Rule)
 light =
     []
@@ -202,7 +267,7 @@ light =
                 , notBeenThereDoneThat "light"
                 ]
            , changes = []
-           , narrative = [ "As my eyes adjust, an entire world unfolds before me.  I realize I am in the middle of field.  The wild grass stretches in all directions to the horizon.  The door behind me leading back down into the [darkness] is carved into a small rocky hill.  I can see a clump of [trees] far in the distance.  As bright as it is, I realize it is actually an overcast morning, but I don't care, I'm relieved to be out of the dark." ]
+           , narrative = [ "As my eyes adjust, an entire world unfolds before me.  I am in the middle of a field.  The wild grass stretches in all directions to the [horizon].  The door behind me leading back down into the [darkness] is carved into a small rocky [hill].  As bright as it is, I realize it is actually an overcast morning, but I don't care, I'm relieved to be out of the dark.\n\nI turn my attention to the [worn photograph|photo].  I study the woman's face.  It is soft and kind.  I know I know her.  I can remember her looking at me with those caring eyes.  I can remember her smile.  And even her voice.  I can hear her saying, \"Don't be afraid honey.  Don't be afraid of the dark.\"\n\nMy mother.  It's my mother." ]
            }
         :: []
 
@@ -530,6 +595,6 @@ limpy =
 
 {-
    Next:
-    - get the photo in there somehow, remember mother, what she taught, maybe you can find her - maybe after looking at trees or raiders you suddenly remember who she is
+    - scene name in forest - light?
 
 -}

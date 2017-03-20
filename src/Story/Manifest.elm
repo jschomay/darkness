@@ -51,7 +51,8 @@ items =
     , item "breeze" "A fresh breeze can breath new life into a stale room."
     , item "light" "It does nothing more than stimulate receptors on the back of our eyes, but for us it creates the entire world."
     , item "exitDoor" "This is the barrier between light and dark."
-    , item "trees" "A peaceful place."
+    , item "hill" "I wonder if it is natural or man-made."
+    , item "horizon" "The world is a big place."
     ]
 
 
@@ -59,6 +60,7 @@ characters : List Entity
 characters =
     [ character "Wheezy" "Disfigured and scarred, saddened by years of hardship, but fortified by determination."
     , character "Limpy" "Full of tenacity, he's going to do what he needs to do."
+    , character "raiders" "A group of bandits up to no good."
     ]
 
 
@@ -72,6 +74,7 @@ locations =
     , location "tunnels" "Where do they all go?"
     , location "exit" "I've never been happier to find the exit."
     , location "field" "A simple landscape, but it is beautiful."
+    , location "forest" "It's amazing just how dark it can get in the forest, even during the day.  I would hate to be here at night."
     ]
 
 
