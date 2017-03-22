@@ -53,6 +53,7 @@ items =
     , item "exitDoor" "This is the barrier between light and dark."
     , item "hill" "I wonder if it is natural or man-made."
     , item "horizon" "The world is a big place."
+    , item "gravestone" "Old and crumbled and very solemn."
     ]
 
 
@@ -74,7 +75,8 @@ locations =
     , location "tunnels" "Where do they all go?"
     , location "exit" "I've never been happier to find the exit."
     , location "field" "A simple landscape, but it is beautiful."
-    , location "forest" "It's amazing just how dark it can get in the forest, even during the day.  I would hate to be here at night."
+    , location "forest" "I would hate to be here at night."
+    , location "cemetery" "This must be very old."
     ]
 
 
@@ -87,4 +89,5 @@ scenes =
     , scene "darkestPart" "The darkest part of the night is just before dawn"
     , scene "onTheRun" "On the run"
     , scene "light" "Light"
+    , scene "trials" "Light?"
     ]

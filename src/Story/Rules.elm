@@ -23,6 +23,8 @@ rulesData =
         , light
         , hill
         , horizon
+        , forest
+        , cemetery
         ]
 
 
@@ -506,6 +508,62 @@ exit =
         :: []
 
 
+forest : List (RuleData Engine.Rule)
+forest =
+    []
+        ++ { summary = "make a break for it, get lost"
+           , interaction = withLocation "forest"
+           , conditions =
+                [ currentLocationIs "field"
+                , currentSceneIs "light"
+                ]
+           , changes =
+                [ moveTo "forest"
+                , loadScene "trials"
+                ]
+           , narrative =
+                [ "The people approaching look like they are up to no good.  They look like raiders.  Have they seen me yet?  I'm not going to stick around to find out.  I'm making a break for the forest.\n\nIt's so much further than it looked, I'm completely out of breath.  But I made it.  The trees are so dense.  Everything is covered in green moss.  I didn't expect how dark it is can get in here despite being day time.  \n\nOh no, I'm [forest|lost] again."
+                ]
+           }
+        :: { summary = "wandering around until finding the clearing"
+           , interaction = withLocation "forest"
+           , conditions =
+                [ currentLocationIs "forest"
+                , currentSceneIs "trials"
+                ]
+           , changes =
+                []
+           , narrative =
+                [ "I've got to find a way out of here.  There must be a town or something not too far.  I think I came from over there, so I'll keep going in this direction..."
+                , "The trees are getting thicker.  I think I need to go this way..."
+                , "I'm completely turned around.  What side of the trees does the moss grow on?  The North?  This moss seems to be growing on all sides of the trees..."
+                , "I've been wandering for ages.  What time is it?  I can't tell if the sun is going down or not.  Maybe there are wild animals in here..."
+                , "The trees seem to be opening up a little.  I'll go this way.\n\nI think I see a [cemetery|clearing].  Finally."
+                , "I wouldn't want to be lost here at night."
+                ]
+           }
+        :: []
+
+
+cemetery : List (RuleData Engine.Rule)
+cemetery =
+    []
+        ++ { summary = "it's a cemetery"
+           , interaction = withLocation "cemetery"
+           , conditions =
+                [ currentLocationIs "forest"
+                , currentSceneIs "trials"
+                , notBeenThereDoneThat "cemetery"
+                ]
+           , changes =
+                [ moveTo "cemetery" ]
+           , narrative =
+                [ "This is a very symmetric clearing.  It looks man-made, but it is heavily overgrown.\n\nWhat's this?  It looks like... a [gravestone].  There's another.  It's a cemetery!  I must be near a town."
+                ]
+           }
+        :: []
+
+
 
 -- Characters
 
@@ -595,6 +653,11 @@ limpy =
 
 {-
    Next:
-    - scene name in forest - light?
+    - inspect gramestone, remember mother, wimpy/limpy, raiders followed
+    - go back and add paths from field:
+      - hiding in darkness (restarts)
+      - looking at raiders then forest, they catch you, throw in pit, wheezy rescues and brings to forest
+      - raiders twice, ? (pit?, bribe you to bring wheezy/limpy to them?)
+    - in end, becomes dusk, and you see lights of fires in town, tell wheezy, but he is dying
 
 -}

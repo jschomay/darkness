@@ -23,3 +23,14 @@
   color: rgb(160, 160, 160);
   text-shadow: none;
 }
+
+
+.Game--trials {
+  background-color: rgb(150, 150, 150);
+  color: rgb(120, 120, 120);
+  text-shadow: none;
+}
+.Game--trials .u-interactable {
+  color: rgb(110, 110, 110);
+  text-shadow: none;
+}
