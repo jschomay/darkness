@@ -34,3 +34,14 @@
   color: rgb(110, 110, 110);
   text-shadow: none;
 }
+
+
+.Game--facingDarkness {
+  background-color: rgb(70, 70, 70);
+  color: rgb(120, 120, 120);
+  text-shadow: none;
+}
+.Game--facingDarkness .u-interactable {
+  color: rgb(140, 140, 140);
+  text-shadow: none;
+}

@@ -76,7 +76,8 @@ locations =
     , location "exit" "I've never been happier to find the exit."
     , location "field" "A simple landscape, but it is beautiful."
     , location "forest" "I would hate to be here at night."
-    , location "cemetery" "This must be very old."
+    , location "cemetery" "This cemetery must be very old."
+    , location "cliff" "A place where you can see clearly to the horizon, but have no way to go to what you see."
     ]
 
 
@@ -90,4 +91,5 @@ scenes =
     , scene "onTheRun" "On the run"
     , scene "light" "Light"
     , scene "trials" "Light?"
+    , scene "facingDarkness" "Facing the darkness"
     ]

@@ -25,6 +25,8 @@ rulesData =
         , horizon
         , forest
         , cemetery
+        , gravestone
+        , raiders
         ]
 
 
@@ -270,6 +272,21 @@ light =
                 ]
            , changes = []
            , narrative = [ "As my eyes adjust, an entire world unfolds before me.  I am in the middle of a field.  The wild grass stretches in all directions to the [horizon].  The door behind me leading back down into the [darkness] is carved into a small rocky [hill].  As bright as it is, I realize it is actually an overcast morning, but I don't care, I'm relieved to be out of the dark.\n\nI turn my attention to the [worn photograph|photo].  I study the woman's face.  It is soft and kind.  I know I know her.  I can remember her looking at me with those caring eyes.  I can remember her smile.  And even her voice.  I can hear her saying, \"Don't be afraid honey.  Don't be afraid of the dark.\"\n\nMy mother.  It's my mother." ]
+           }
+        :: []
+
+
+gravestone : List (RuleData Engine.Rule)
+gravestone =
+    []
+        ++ { summary = "remember mother is dead"
+           , interaction = withItem "gravestone"
+           , conditions = []
+           , changes = []
+           , narrative =
+                [ "I reach out and touch one of the gravestones.  It is hard and cold, and crumbling with age.\n\nAs I run my fingers over the embossed letters I get a strange feeling of déjà vu.  I remember being in a cemetery before.  I remember a grave.  I remember crying.  My mother.  It was my mother's grave.  I remember now.  My mother is gone.\n\nI look at the [worn photograph| photo] of her again and cry.  I can't believe she is gone."
+                , "Who was it for?  Does anyone remember them?"
+                ]
            }
         :: []
 
@@ -522,7 +539,7 @@ forest =
                 , loadScene "trials"
                 ]
            , narrative =
-                [ "The people approaching look like they are up to no good.  They look like raiders.  Have they seen me yet?  I'm not going to stick around to find out.  I'm making a break for the forest.\n\nIt's so much further than it looked, I'm completely out of breath.  But I made it.  The trees are so dense.  Everything is covered in green moss.  I didn't expect how dark it is can get in here despite being day time.  \n\nOh no, I'm [forest|lost] again."
+                [ "The people approaching look like they are up to no good.  They look like raiders.  Have they seen me yet?  I'm not going to stick around to find out.  I'm making a break for the forest.\n\nIt's so much further than it looked, I'm completely out of breath.  But I made it.  The trees are so dense.  Everything is covered in green moss.  I didn't expect how dark it would be in here for being day time.  \n\nI walk through the trees and realize I'm [forest|lost] again."
                 ]
            }
         :: { summary = "wandering around until finding the clearing"
@@ -537,10 +554,22 @@ forest =
                 [ "I've got to find a way out of here.  There must be a town or something not too far.  I think I came from over there, so I'll keep going in this direction..."
                 , "The trees are getting thicker.  I think I need to go this way..."
                 , "I'm completely turned around.  What side of the trees does the moss grow on?  The North?  This moss seems to be growing on all sides of the trees..."
-                , "I've been wandering for ages.  What time is it?  I can't tell if the sun is going down or not.  Maybe there are wild animals in here..."
+                , "I've been wandering for ages.  What time is it?  I can't tell if the sun is going down or not.  There could be wild animals in here..."
                 , "The trees seem to be opening up a little.  I'll go this way.\n\nI think I see a [cemetery|clearing].  Finally."
                 , "I wouldn't want to be lost here at night."
                 ]
+           }
+        :: { summary = "lost in many ways"
+           , interaction = withLocation "forest"
+           , conditions =
+                [ currentLocationIs "cemetery"
+                , currentSceneIs "trials"
+                , beenThereDoneThat "gravestone"
+                ]
+           , changes =
+                []
+           , narrative =
+                [ "I feel lost in more ways than one." ]
            }
         :: []
 
@@ -559,6 +588,40 @@ cemetery =
                 [ moveTo "cemetery" ]
            , narrative =
                 [ "This is a very symmetric clearing.  It looks man-made, but it is heavily overgrown.\n\nWhat's this?  It looks like... a [gravestone].  There's another.  It's a cemetery!  I must be near a town."
+                ]
+           }
+        :: { summary = "wheezy and limpy are here too"
+           , interaction = withLocation "cemetery"
+           , conditions =
+                [ currentLocationIs "cemetery"
+                , currentSceneIs "trials"
+                , beenThereDoneThat "gravestone"
+                , characterIsNotInLocation "Wheezy" "cemetery"
+                ]
+           , changes =
+                [ moveCharacterToLocation "Wheezy" "cemetery"
+                , moveCharacterToLocation "Limpy" "cemetery"
+                ]
+           , narrative =
+                [ "I look around the cemetery again.  There must be a hundred graves here, all overgrown and forgotten.\n\nAm I imagining, or do I hear something?  Like heavy breathing?  More of a wheeze actually...\n\nWheezy is here!  He must have made it out too.  I am about to call out to him when I realize he is standing over a grave.  Maybe he is mourning someone too.\n\nI thought I saw something else move.  I look around.  Someone else is behind that tree.  Or is it that other tree?  No, it's both.  Even more than that.  A whole group emerges from the forest -- Limpy's friends, and Limpy too.\n\nThey are all here mourning.  They have all lost someone. We all feel alone.  Alone together."
+                ]
+           }
+        :: { summary = "raiders followed"
+           , interaction = withLocation "cemetery"
+           , conditions =
+                [ currentLocationIs "cemetery"
+                , currentSceneIs "trials"
+                , characterIsInLocation "Wheezy" "cemetery"
+                ]
+           , changes =
+                [ loadScene "facingDarkness"
+                , moveTo "cliff"
+                , moveCharacterToLocation "Wheezy" "cliff"
+                , moveCharacterToLocation "raiders" "cliff"
+                , moveCharacterOffScreen "Limpy"
+                ]
+           , narrative =
+                [ "I hear more people coming.  More mourners?  No, it's the raiders!  They followed me!\n\nLimpy and his friends spot them too and scatter into the trees.  The raiders chase after them.  Wheezy and I run too.  We follow some of the others, out of the cemetery, jumping over fallen trees and thick roots.\n\nThe raiders are behind us.  We push forward, but I am losing my breath.  I can only imagine poor Wheezy.  We start to fall behind, and soon I can't see any of the others.  They must have gotten away.\n\nThe trees thin ahead.  We make it out of the forest onto a grassy plain.  It is already dusk.  The sky is not completely dark yet, but I can see a few early stars.\n\nSuddenly I realize we are on the top of a cliff.  I pause for a moment to see which way to go.  The raiders break out of the trees, and one of them throws something at Wheezy.  He stumbles.  I hesitate.  I can help him, but then they'll catch us both.  I can't leave [Wheezy].  Where can I go anyway?\n\nIt's too late.  The [raiders] reach him.  One of them smashes him across the face, opening up a fresh scar.\n\n\"Hey!  Leave him alone!\"  Wheezy looks up and tells me to run, but it is too late, the lead raider blocks my path.\n\nThe other raiders shout at Wheezy.  One of them kicks him, knocking him to the ground."
                 ]
            }
         :: []
@@ -626,6 +689,16 @@ wheezy =
                 , "I've lost him."
                 ]
            }
+        :: { summary = "helping wheezy"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "facingDarkness" ]
+           , changes = []
+           , narrative =
+                [ "I rush over to help him.\n\n\"Don't waste your time.  He is a disease.  A drain on society.  He uses up our resources and offers nothing in return.  And your other friend?  A thief.  We helped him once, and he stole from us.\n\nLeave them.  Come with us.  We have a city with shining walls and beautiful parks.  A place of safety and security.  You don't belong here.  We'll bring you to our city.\"\n\nI look over at Wheezy.  He is bleeding badly from the wound on his face.  What help can I be to him?  The city sounds amazing.  Should I go with them?"
+                , "comforting wheezy, talk about mother..."
+                ]
+           }
         :: []
 
 
@@ -650,14 +723,34 @@ limpy =
         :: []
 
 
+raiders : List (RuleData Engine.Rule)
+raiders =
+    []
+        ++ { summary = "go with raiders"
+           , interaction = withCharacter "raiders"
+           , conditions =
+                [ currentSceneIs "facingDarkness" ]
+           , changes = []
+           , narrative =
+                [ "to city..."
+                ]
+           }
+        :: []
+
+
 
 {-
    Next:
-    - inspect gramestone, remember mother, wimpy/limpy, raiders followed
+    - fix - if interacting with raiders before wheezy, should say something else, maybe same thing as interacting with wheezy?
+    - add memories from mother for photo
     - go back and add paths from field:
       - hiding in darkness (restarts)
       - looking at raiders then forest, they catch you, throw in pit, wheezy rescues and brings to forest
       - raiders twice, ? (pit?, bribe you to bring wheezy/limpy to them?)
-    - in end, becomes dusk, and you see lights of fires in town, tell wheezy, but he is dying
+    - final challenge - raiders keep trying to convince you to come with them, you can keep talking to wheezy about his mother and your mother and what she taught you, eventually raiders will go away (like how to deal with bullies on bus example).  Before leaving, they stop bribing you and start attacking you.  Limpy and his friends come out of the wordwork and form a circle around you, protecting you and standing in solidarity, and they leave.  Fight darkness with light.  (at any time, if you interact with raiders, they take you to city, get that ending, unless you wait until they fight you, maybe interacting with them then makes them beat you up and leave you and wheezy dying in the cemetery, "never finding the light (dying seeing the lights of the town below the cliff, knowing you'll never get there)."
+    - good ending, you see lights of fires in town, tell wheezy, but he is dying, epiphany
+
+
+
 
 -}
