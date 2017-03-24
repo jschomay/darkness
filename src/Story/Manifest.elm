@@ -54,6 +54,7 @@ items =
     , item "hill" "I wonder if it is natural or man-made."
     , item "horizon" "The world is a big place."
     , item "gravestone" "Old and crumbled and very solemn."
+    , item "offer" "Do I stay, or do I go?"
     ]
 
 
@@ -92,4 +93,5 @@ scenes =
     , scene "light" "Light"
     , scene "trials" "Light?"
     , scene "facingDarkness" "Facing the darkness"
+    , scene "fadeToBlack" "Fade to black"
     ]
