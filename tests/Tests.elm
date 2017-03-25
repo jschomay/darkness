@@ -60,6 +60,6 @@ hypermediaTests =
                             , text " look mighty inviting."
                             ]
                 in
-                    Expect.equal (toString expectation) <| toString <| Hypermedia.parse Msg (Dict.fromList [ ( "1", "wind" ), ( "2", "ocean" ), ( "3", "hammock" ) ]) input
+                    Expect.equal (toString expectation) <| toString <| Hypermedia.parse False Msg (Dict.fromList [ ( "1", "wind" ), ( "2", "ocean" ), ( "3", "hammock" ) ]) input
         ]
     ]

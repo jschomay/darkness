@@ -7,6 +7,7 @@ type Msg
     = Interact Id
     | Loaded
     | ReadyToScroll { offset : Float, scrollTop : Float }
+    | Scroll Int
     | Tick Float
     | NoOp
 

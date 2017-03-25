@@ -5,8 +5,6 @@
   cursor: default;
 }
 
-html, body { height: 100%; }
-
 body {
   margin: 0px;
   padding: 0px;
@@ -26,7 +24,7 @@ p {
   background-color: rgb(20, 20, 20);
   color: rgb(100, 100, 100);
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-  transition: background-color 3s ease-in-out;
+  transition: background-color 3s ease-in-out 1s, text-shadow 3s ease-in-out 1s, color 3s ease-in-out 1s;
 }
 
 @media (max-width: 770px) {
@@ -35,6 +33,47 @@ p {
   }
 }
 
+.QuickBar {
+  background: inherit;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 50px;
+  box-shadow: 0 7px 17px 0px rgba(0, 0, 0, 0.2);
+  transition: transform 1s;
+  transform: translate(0, 0);
+  min-height: 0px;
+}
+
+.QuickBar--hidden {
+  transform: translate(0, -300px);
+}
+
+.QuickBar > .u-interactable {
+  margin-right: 80px;
+  padding:  15px 0;
+  font-size: 60%;
+  line-height: 60%;
+  opacity: 0.4;
+}
+
+.QuickBar > .u-interactable:last-child {
+  margin-right: 0;
+}
+
+@media (max-width: 770px) {
+  .QuickBar {
+    padding: 0 20px;
+  }
+
+  .QuickBar > .u-interactable {
+    margin-right: 40px;
+    padding:  15px 0;
+  }
+}
 .Layout {
   position: relative;
   width: 80%;
@@ -71,12 +110,17 @@ p {
   margin-bottom: 60px;
   color: inherit;
   opacity: 0.7;
+  text-align: center;
 }
 
 .Storyline__Item {
   opacity: 0;
   margin-bottom: 100px;
-  animation: fadeIn 3s ease-in forwards;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+.Storyline__Item:first-child {
+  animation: none;
 }
 
 .Storyline__Item:last-child {
@@ -88,6 +132,7 @@ p {
   color: rgb(150, 150, 150);
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
   cursor: pointer;
+  transition: text-shadow 3s ease-in-out 1s, color 3s ease-in-out 1s;
 }
 
 .u-interactable:hover {
