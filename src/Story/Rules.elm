@@ -164,7 +164,7 @@ lighter =
            , changes = []
            , narrative =
                 [ "It feels almost empty.\n\n I give it a flick and the short burst of sparks almost blind me for a second, but the tiny weak flame barely penetrates the darkness.  It shudders and goes out."
-                , "I am afraid to waste it."
+                , "I am afraid to waste it, and it isn't enough light to see anyway."
                 ]
            }
         :: { summary = "light Wheezy's candle"
@@ -318,7 +318,7 @@ darkness =
            , changes =
                 [ moveCharacterToLocation "Wheezy" "darkness"
                 ]
-           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nHere is a wall, rough and jagged, but I can follow it.  The air is still and dry.\n\nWait.  I hear something.  A low, raspy breathing.  [Wheezy|Someone or something] is in here with me.\n\nIt's coming closer.  Do I confront it?  In the dark?  Maybe I can [hiding spot|hide]." ]
+           , narrative = [ "I must find a way out.  If I can't see my way, I'll feel my way.\n\nHere is a wall, rough and jagged, but I can follow it.  The air is still and dry.\n\nWait.  I hear something.  A low, raspy [Wheezy|breathing].  Someone or something is in here with me.\n\nIt's coming closer.  Do I confront it?  In the dark?  Maybe I can [hiding spot|hide]." ]
            }
         :: { summary = "while hiding"
            , interaction = withLocation "darkness"
@@ -418,9 +418,8 @@ hidingSpot =
                 ]
            , changes = []
            , narrative =
-                [ "There's no point hiding again, he knows I'm right here."
-                , "Really I'd rather not go in there again.  Who knows what might be growing in there."
-                , "I'm not hiding again."
+                [ "There's no point hiding now, he knows I'm right here."
+                , "Really I'd rather not go in there.  Who knows what might be growing in there."
                 ]
            }
         :: { summary = "wheezy attacks you when you continue to hide (start over)"
