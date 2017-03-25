@@ -93,6 +93,21 @@ pluckContent =
         Tuple.second <| List.foldl foldFn ( 1, Dict.empty ) rulesData
 
 
+initialEngineModel : Engine.Model
+initialEngineModel =
+    Engine.init
+        { manifest =
+            { items = getIds items
+            , locations = getIds locations
+            , characters = getIds characters
+            }
+        , rules = pluckRules
+        , startingLocation = "darkness"
+        , startingScene = "intro"
+        , setup = []
+        }
+
+
 init : ( Model, Cmd ClientTypes.Msg )
 init =
     ( { engineModel =
@@ -129,6 +144,12 @@ update msg model =
             let
                 ( newEngineModel, maybeMatchedRuleId ) =
                     Engine.update interactableId model.engineModel
+                        |> (\( newEngineModel, maybeMatchedRuleId ) ->
+                                if maybeMatchedRuleId == Just "rule7" then
+                                    ( initialEngineModel, maybeMatchedRuleId )
+                                else
+                                    ( newEngineModel, maybeMatchedRuleId )
+                           )
 
                 newNarrative : String
                 newNarrative =

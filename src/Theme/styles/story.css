@@ -31,7 +31,7 @@
   text-shadow: none;
 }
 .Game--trials .u-interactable {
-  color: rgb(110, 110, 110);
+  color: rgb(90, 90, 90);
   text-shadow: none;
 }
 
@@ -110,7 +110,7 @@
   background-color: rgb(20, 20, 20);
   color: rgb(100, 100, 100);
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-  animation: fadeToWhite 20s 45s forwards;
+  animation: fadeToWhite 25s 50s forwards;
 }
 
 

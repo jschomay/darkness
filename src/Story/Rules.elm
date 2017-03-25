@@ -54,7 +54,7 @@ wornPhotograph =
            , conditions = [ currentSceneIs "firstLight" ]
            , changes = []
            , narrative =
-                [ "I forgot at the photo!  I can see it now.  It is of a woman.  But I don't recognizer her...  She seems familiar.  But I can't remember..."
+                [ "I forgot about the photo!  I can see it now.  It is of a woman.  But I don't recognizer her...  She seems familiar.  But I can't remember..."
                 , "Who is she?  Why do I have it?"
                 , "Why can't I remember her?"
                 ]
@@ -67,8 +67,22 @@ wornPhotograph =
                 ]
            , changes = []
            , narrative =
-                [ "She must be out there somewhere.  Maybe I can find her."
-                , "I miss her."
+                [ "I remember when I was afraid, she would teach me lessons about darkness and light.  She taught me that darkness cannot extinguish light the way water extinguishes fire.  \"Light only fades if you let it.  It is up to you to keep your own light shining bright.\""
+                , "She told me how a candle doesn't lose any of its own flame when it lights another candle.  It just spreads the light.  She said the same is true for smiles, love, and kindness.  \"To teach kindness, show kindness.\""
+                , "I miss her.  She must be out there somewhere.  Maybe I can find her."
+                ]
+           }
+        :: { summary = "remembering more lessons"
+           , interaction = withItem "worn photograph"
+           , conditions =
+                [ currentSceneIs "trials"
+                , currentLocationIs "cemetery"
+                ]
+           , changes = []
+           , narrative =
+                [ "I wish I could talk to her again.  Hear her stories.  It doesn't seem fair.  I've made it this far, but for what?  I'll never see her again.  How can I go on?  Why should I go on?  I feel more alone than ever."
+                , "I remember something else she once said.  \"Sometimes, you might not see the light that is inside you.  Sometimes it might fade away so much that you will wonder if it is still there.  But I promise you, it will never go out.  It might get so dim that you would have to be in near total darkness to notice it.  But when you do, you'll remember that it has been there all along, and that it will always be there, waiting for you to fan the flames that keep it strong.\"\n\nI don't know.  I hope she is right."
+                , "I still miss her."
                 ]
            }
         :: []
@@ -85,7 +99,7 @@ candle =
                 ]
            , changes = []
            , narrative =
-                [ "The light is almost magical.  I have already forgot what it was like in absolute darkness.  I certainly don't want to go back to that."
+                [ "The light is almost magical.  I have already forgotten what it was like in absolute darkness.  I certainly don't want to go back to that."
                 , "The wax is dripping down the side.  It is burning down fast."
                 , "I don't know how much longer it will last.  I hope we get out soon."
                 , "It will go out soon."
@@ -272,7 +286,7 @@ light =
                 , notBeenThereDoneThat "light"
                 ]
            , changes = []
-           , narrative = [ "As my eyes adjust, an entire world unfolds before me.  I am in the middle of a field.  The wild grass stretches in all directions to the [horizon].  The door behind me leading back down into the [darkness] is carved into a small rocky [hill].  As bright as it is, I realize it is actually an overcast morning, but I don't care, I'm relieved to be out of the dark.\n\nI turn my attention to the [worn photograph|photo].  I study the woman's face.  It is soft and kind.  I know I know her.  I can remember her looking at me with those caring eyes.  I can remember her smile.  And even her voice.  I can hear her saying, \"Don't be afraid honey.  Don't be afraid of the dark.\"\n\nMy mother.  It's my mother." ]
+           , narrative = [ "As my eyes adjust, an entire world unfolds before me.  I am in the middle of a field.  The wild grass stretches in all directions to the [horizon].  The door I just came though is carved into a small rocky [hill].  As bright as it is, I realize it is actually an overcast morning, but I don't care, I'm relieved to be out of the dark.\n\nI turn my attention to the [worn photograph|photo].  I study the woman's face.  It is soft and kind.  I know I know her.  I can remember her looking at me with those caring eyes.  I can remember her smile.  And even her voice.  I can hear her saying, \"Don't be afraid honey.  Don't be afraid of the dark.\"\n\nMy mother.  It's my mother." ]
            }
         :: []
 
@@ -343,7 +357,7 @@ darkness =
            , narrative =
                 [ "The darkness is so complete.  I would never know that I was in this large chamber.  If there was a big sign pointing \"Exit, this way\" I wouldn't even know.  I hope giving up my candle wasn't a big mistake."
                 , "How long will he be gone?  I hope he comes back soon."
-                , "What if he doesn't come back?  How long should I sit here?  I still have my lighter, maybe that is enough.  I give it a flick.  The flame is so tiny.  It can't even see the tunnels.  I have no choice, I have to wait."
+                , "What if he doesn't come back?  How long should I sit here?  I still have my lighter, maybe that is enough.  I give it a flick.  The flame is so tiny.  It doesn't even reach the tunnels.  I have no choice, I have to wait."
                 , "How long has it been?  Did he forget about me?  I bet he never intended to come back.  He just wanted my candle, and I let him have it.  I'm so stupid!"
                 , "I'll never get out.  I'll never know who is in the photo.  I'll never see the light again.  What if I die here?"
                 , "I have to do something.  One of those tunnels goes out, I know it.  I might wander around in circles, but it's better than staying here!  Were they this way?\n\nI think I can hear the wind.  No, it's water.  No, it's not that either, it's... footsteps!\n\nI see the faintest glow now.  Yes, it's getting brighter.  It's Limpy.  He came back!  He wasn't lying.  And he has some friends with him, about ten other people, each with a candle.  How many other people are down here?\n\nLimpy comes up to me.  His face is still hard, but I realize it is just from hardship.  \"For you.\"  He hands me his candle, plus three more from the others.  \"That way [exit|out].\"  Without another word he leads his group away through a different tunnel and silence returns, but now I can see my way."
@@ -367,15 +381,6 @@ darkness =
                 , "I'll just rest a little longer until I'm ready."
                 ]
            }
-        :: { summary = "not going back"
-           , interaction = withLocation "darkness"
-           , conditions =
-                [ currentLocationIs "field"
-                ]
-           , changes = []
-           , narrative =
-                [ "I have no desire to return there." ]
-           }
         :: { summary = "back into the darkness"
            , interaction = withLocation "darkness"
            , conditions =
@@ -390,7 +395,7 @@ darkness =
                 , moveItemOffScreen "offer"
                 ]
            , narrative =
-                [ "I am alone.\n\n Alone in this overwhelming darkness..." ]
+                [ "\"It is only in the face of [darkness], that we remember the importance of light.\"" ]
            }
         :: []
 
@@ -544,18 +549,31 @@ exit =
 forest : List (RuleData Engine.Rule)
 forest =
     []
-        ++ { summary = "make a break for it, get lost"
+        ++ { summary = "how far is it"
            , interaction = withLocation "forest"
            , conditions =
                 [ currentLocationIs "field"
                 , currentSceneIs "light"
+                , notBeenThereDoneThat "raiders"
+                ]
+           , changes = []
+           , narrative =
+                [ "I wonder how long it would take to reach it?"
+                ]
+           }
+        :: { summary = "make a break for it, get lost"
+           , interaction = withLocation "forest"
+           , conditions =
+                [ currentLocationIs "field"
+                , currentSceneIs "light"
+                , beenThereDoneThat "raiders"
                 ]
            , changes =
                 [ moveTo "forest"
                 , loadScene "trials"
                 ]
            , narrative =
-                [ "The people approaching look like they are up to no good.  They look like raiders.  Have they seen me yet?  I'm not going to stick around to find out.  I'm making a break for the forest.\n\nIt's so much further than it looked, I'm completely out of breath.  But I made it.  The trees are so dense.  Everything is covered in green moss.  I didn't expect how dark it would be in here for being day time.  \n\nI walk through the trees and realize I'm [forest|lost] again."
+                [ "I make a break for the forest.  I don't think they saw me.\n\nIt's so much further than it looked, I'm completely out of breath.  But I made it.\n\nThe trees are so dense.  Everything is covered in green moss.  I didn't expect how dark it would be in here for being day time.  \n\nI walk through the trees and realize I'm [forest|lost] again."
                 ]
            }
         :: { summary = "wandering around until finding the clearing"
@@ -711,8 +729,8 @@ wheezy =
                 ]
            , changes = []
            , narrative =
-                [ "I call out for him again, but there is no answer.  Where is he, he should have been right behind me."
-                , "Maybe I should try to go back and find him.\n\nWhere is the crack, it was here a moment ago! I can't find it!  The wind turned me around.  \"Wheezy!\""
+                [ "I call out for him again, but there is no answer.  Where is he, he should have been right behind me?"
+                , "Maybe I should try to go back and find him.\n\nI can't find the crack, it was here a moment ago!  The wind turned me around.  \"Wheezy!\""
                 , "I've lost him."
                 ]
            }
@@ -735,7 +753,7 @@ wheezy =
                 ]
            , changes = [ moveItemToInventory "secondOffer" ]
            , narrative =
-                [ "I can't just leave Wheezy like this.  I try to comfort him.  \"Don't listen to them.  Everything is going to be alright.  I won't leave you.\"\n\nWheezy struggles to prop himself up.  \"Go to the city.  That's what you've been wanting.  I can make it on my own.\"\n\n\"But--\"\n\nThe lead raider chips in, \"Come on man.  Leave this slug behind.  He knows he's not wanted.\""
+                [ "I can't just leave him like this.  I try to comfort him.  \"Don't listen to them.  Everything is going to be alright.  I won't leave you.\"\n\nWheezy struggles to prop himself up.  \"Go to the city.  That's what you've been wanting.  I can make it on my own.\"\n\n\"But--\"\n\nThe lead raider chips in, \"Come on man.  Leave this slug behind.  He knows he's not wanted.\""
                 ]
            }
         :: { summary = "continue to comfort wheezy"
@@ -757,7 +775,7 @@ wheezy =
                 ]
            , changes = [ loadScene "lightsInTheDarkness" ]
            , narrative =
-                [ "I move around to block the dirt from hitting Wheezy, and ignore the raiders.\n\n\"You know the favorite thing my mother taught me?  She taught me that darkness does not exist.  Darkness is simply the absence of light.  You can fill darkness with light, but you cannot fill light with darkness.  She taught me that if I remember to focus on the light, I will never be alone in the dark.\"\n\nWheezy smiles again and pats my hand.  \"I think I would have liked your mother.\"\n\nBut the raiders are not smiling.  Their faces turn ugly.  The leader leans right into my face.  \"Nice speech.  How's that working for you now?\"\n\nHe punches me so hard, he sends me sprawling to the ground beside Wheezy with a fresh gash of my own in my face.  The other raiders join in, kicking, punching, and attacking us.  I realize I just made things worse.  I catch a glimpse of Wheezy shielding his face between the raider's blows.  Our eyes meet for a brief second.  But he doesn't look upset.  Instead he smiles at me.\n\nBefore I realize what is happening, I become aware of other people surrounding us now.  More raiders, come to join in beating us?  But they seem familiar, and I see that they are forming a circle around us.  Protecting us.  It's Limpy, and his friends.  They outnumber the raiders, but they are not fighting, they just stand in silent solidarity, facing down the raiders with their resolute stares.  The raiders cannot reach us anymore.  They are angrier than ever, but don't know what to do.  Eventually, they slink away, sputtering slurs, but rendered completely inconsequential.  \"Never come to our city.  You're not welcome anymore.\"\n\nLimpy and his friends stand guard until the raiders are out of sight, then they slowly break apart and filter away.  Limpy looks at both of us, nods silently, and follows the rest of them until we are alone once again.\n\nWheezy and I lay there on the cliff top for quite a while, looking up at the bright stars in the night sky.  Eventually I roll over.  I notice lights in the distance, far below.  I sit up and look closer.  They are the shimmering lights of small [town] in the valley below."
+                [ "I move around to block the dirt from hitting Wheezy, and ignore the raiders.\n\n\"You know the favorite thing my mother taught me?  She taught me that darkness does not exist.  Darkness is simply the absence of light.  You can fill darkness with light, but you cannot fill light with darkness.\"\n\nWheezy smiles again and pats my hand.  \"I think I would have liked your mother.\"\n\nBut the raiders are not smiling.  Their faces turn ugly.  The leader leans right into my face.  \"Nice speech.  How's that working for you now?\"\n\nHe punches me so hard, he sends me sprawling to the ground beside Wheezy with a fresh gash of my own on my face.  The other raiders join in, kicking, punching, and attacking us.  I realize I just made things worse.  I catch a glimpse of Wheezy shielding his face between the raider's blows.  Our eyes meet for a brief second.  But he doesn't look upset.  Instead he smiles at me.\n\nBefore I realize what is happening, I become aware of other people surrounding us now.  More raiders, come to join in beating us?  But they seem familiar, and I see that they are forming a circle around us.  Protecting us.  It's Limpy, and his friends.  They outnumber the raiders, but they are not fighting, they just stand in silent solidarity, facing down the raiders with their resolute stares.  The raiders cannot reach us anymore.  They are angrier than ever, but don't know what to do.  Eventually, they slink away, sputtering slurs, but rendered completely inconsequential.  \"Never come to our city.  You're not welcome anymore.\"\n\nLimpy and his friends stand guard until the raiders are out of sight, then they slowly break apart and filter away.  Limpy looks at both of us, nods silently, and follows the rest of them until we are alone once again.\n\nWheezy and I lay there on the cliff top for quite a while, looking up at the bright stars in the night sky.  Eventually I roll over.  I notice lights in the distance, far below.  I sit up and look closer.  They are the shimmering lights of small [town] in the valley below."
                 ]
            }
         :: []
@@ -787,7 +805,19 @@ limpy =
 raiders : List (RuleData Engine.Rule)
 raiders =
     []
-        ++ { summary = "confront raiders, get offer to go to city"
+        ++ { summary = "first glimpse"
+           , interaction = withCharacter "raiders"
+           , conditions =
+                [ currentSceneIs "light"
+                , currentLocationIs "field"
+                ]
+           , changes = []
+           , narrative =
+                [ "I strain to make out some details.  There are three of them.  They look rough and up to no good.  I think they are raiders.  Have they seen me yet?  I'm not sure I want want to find out."
+                , "They are getting closer.  I don't think I want to be here when they arrive."
+                ]
+           }
+        :: { summary = "confront raiders, get offer to go to city"
            , interaction = withCharacter "raiders"
            , conditions =
                 [ currentSceneIs "facingDarkness"
@@ -812,19 +842,3 @@ raiders =
                 [ "\"Ok\" I say. \"Take me to the city.\"\n\nThe raiders lead me away.  I look back and see Wheezy panting on the ground, nursing his injuries.  He'll be fine, I'm sure.  Right?  I think I spot Limpy glaring out at me from the trees.\n\nWell, I was never meant to be like them.  I'm different.  The raiders wouldn't have accepted me if I weren't.  Maybe they're not so bad after all.  They're just protecting what they've built.\n\nWe walk for many miles until the sun comes up.  And I see it, the city shining in the morning sun, like a welcoming promise of safety and prosperity.\n\nI get used to the city.  I do well here.  I make new friends.  From time to time I remember Wheezy and Limpy and I feel a little bad and sorry for them.\n\nIt's easier if I try to forget them.  And how they helped me when I was down.  And the things my mother taught me.  Surprisingly, it is easier than I imagined.  Over time, the memories just fade away.\n\nI let them go.  Let them slip down into the [darkness]." ]
            }
         :: []
-
-
-
-{-
-   Remaining:
-    - add memories from mother for photo
-    - go back and add paths from field:
-      - hiding in darkness (restarts)
-      - looking at raiders then forest, they catch you, throw in pit, wheezy rescues and brings to forest
-      - raiders twice, ? (pit?, bribe you to bring wheezy/limpy to them?)
-    - if "return to darkness" rule matches (after "bad ending"), re-init engine in model?
-
-
-
-
--}
