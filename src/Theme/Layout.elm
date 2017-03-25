@@ -7,13 +7,16 @@ import ClientTypes exposing (..)
 
 
 view :
-    String
+    Bool
     -> String
+    -> String
+    -> List (Html Msg)
     -> List (List (Html Msg))
     -> Html Msg
-view currentSceneId currentSceneTitle storyLine =
+view hideQuickBar currentSceneId currentSceneTitle quickBarItems storyLine =
     div [ class <| "Game Game--" ++ currentSceneId ]
-        [ div [ class "Layout" ]
+        [ div [ classList [ ( "QuickBar", True ), ( "QuickBar--hidden", hideQuickBar ) ] ] quickBarItems
+        , div [ class "Layout" ]
             [ Theme.Storyline.view currentSceneId currentSceneTitle storyLine
             ]
         ]

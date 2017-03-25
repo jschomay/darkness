@@ -26,8 +26,8 @@
 
 
 .Game--trials {
-  background-color: rgb(150, 150, 150);
-  color: rgb(120, 120, 120);
+  background-color: rgb(160, 160, 160);
+  color: rgb(100, 100, 100);
   text-shadow: none;
 }
 .Game--trials .u-interactable {

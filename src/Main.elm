@@ -23,7 +23,13 @@ type alias Model =
     , content : Dict String (Maybe (Zipper String))
     , animationTime : Float
     , animation : Animation
+    , scroll : ( ScrollDirection, Int )
     }
+
+
+type ScrollDirection
+    = Up
+    | Down
 
 
 main : Program Never Model ClientTypes.Msg
@@ -107,6 +113,7 @@ init =
       , content = pluckContent
       , animationTime = 0
       , animation = Animation.static 0 |> Animation.duration 400
+      , scroll = ( Up, 0 )
       }
     , Cmd.none
     )
@@ -173,6 +180,16 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        Scroll scroll ->
+            let
+                direction =
+                    if Tuple.second model.scroll < scroll || scroll == 0 then
+                        Up
+                    else
+                        Down
+            in
+                ( { model | scroll = ( direction, scroll ) }, Cmd.none )
+
         ReadyToScroll { offset, scrollTop } ->
             let
                 startedAnimation =
@@ -201,11 +218,15 @@ port loaded : (Bool -> msg) -> Sub msg
 port readyToScroll : ({ offset : Float, scrollTop : Float } -> msg) -> Sub msg
 
 
+port onScroll : (Int -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub ClientTypes.Msg
 subscriptions model =
     Sub.batch
         [ loaded <| always Loaded
         , readyToScroll ReadyToScroll
+        , onScroll Scroll
         , if not <| Animation.isDone model.animationTime model.animation then
             AnimationFrame.diffs Tick
           else
@@ -249,8 +270,24 @@ view model =
                 )
                 (items ++ locations ++ characters)
                 |> Dict.fromList
-    in
-        Theme.Layout.view currentSceneId currentSceneTitle <|
+
+        storyLine =
             List.map
                 (Hypermedia.parseMultiLine Interact interactables)
                 model.storyLine
+
+        quickBarItems =
+            List.foldr
+                ((Hypermedia.extractInteractables Interact interactables) >> (++))
+                []
+                model.storyLine
+
+        hideQuickBar =
+            case Tuple.first model.scroll of
+                Up ->
+                    True
+
+                Down ->
+                    False
+    in
+        Theme.Layout.view hideQuickBar currentSceneId currentSceneTitle quickBarItems storyLine

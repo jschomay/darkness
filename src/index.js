@@ -15,3 +15,6 @@ app.ports.prepScroll.subscribe(function() {
     app.ports.readyToScroll.send({offset: offset, scrollTop: scrollTop});
   });
 });
+window.onscroll = function() {
+  app.ports.onScroll.send(window.pageYOffset || document.body.scrollTop);
+};

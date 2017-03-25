@@ -35,6 +35,47 @@ p {
   }
 }
 
+.QuickBar {
+  background: inherit;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 50px;
+  box-shadow: 0 7px 17px 0px rgba(0, 0, 0, 0.2);
+  transition: transform 1s;
+  transform: translate(0, 0);
+  min-height: 0px;
+}
+
+.QuickBar--hidden {
+  transform: translate(0, -300px);
+}
+
+.QuickBar > .u-interactable {
+  margin-right: 80px;
+  padding:  15px 0;
+  font-size: 60%;
+  line-height: 60%;
+  opacity: 0.4;
+}
+
+.QuickBar > .u-interactable:last-child {
+  margin-right: 0;
+}
+
+@media (max-width: 770px) {
+  .QuickBar {
+    padding: 0 20px;
+  }
+
+  .QuickBar > .u-interactable {
+    margin-right: 40px;
+    padding:  15px 0;
+  }
+}
 .Layout {
   position: relative;
   width: 80%;
@@ -71,6 +112,7 @@ p {
   margin-bottom: 60px;
   color: inherit;
   opacity: 0.7;
+  text-align: center;
 }
 
 .Storyline__Item {
