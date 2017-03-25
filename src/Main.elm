@@ -8,11 +8,9 @@ import Theme.Layout
 import ClientTypes exposing (..)
 import Components exposing (..)
 import Dict exposing (Dict)
-import Task
 import AnimationFrame
 import Animation exposing (Animation)
 import Hypermedia exposing (parse)
-import Dom.Scroll as Dom
 import List.Zipper as Zipper exposing (Zipper)
 
 
@@ -182,8 +180,7 @@ update msg model =
                     if isNewScene then
                         prepScroll ()
                     else
-                        Task.attempt (always NoOp) <|
-                            Task.mapError identity (Dom.toY "scroll-container" <| 0)
+                        scrollPage 0
             in
                 ( { model
                     | engineModel = newEngineModel
@@ -222,15 +219,14 @@ update msg model =
             let
                 scroll =
                     Animation.animate model.animationTime model.animation
-
-                doScroll =
-                    Task.attempt (always NoOp) <|
-                        Task.mapError identity (Dom.toY "scroll-container" <| scroll)
             in
-                ( { model | animationTime = model.animationTime + dt }, doScroll )
+                ( { model | animationTime = model.animationTime + dt }, scrollPage scroll )
 
 
 port prepScroll : () -> Cmd msg
+
+
+port scrollPage : Float -> Cmd msg
 
 
 port loaded : (Bool -> msg) -> Sub msg
