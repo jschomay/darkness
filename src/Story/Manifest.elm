@@ -54,7 +54,9 @@ items =
     , item "hill" "I wonder if it is natural or man-made."
     , item "horizon" "The world is a big place."
     , item "gravestone" "Old and crumbled and very solemn."
-    , item "offer" "Do I stay, or do I go?"
+    , item "offer" "A chance to get what I've been looking for."
+    , item "secondOffer" "Their patience is running out."
+    , item "finalOffer" "Do I stay, or do I go?"
     ]
 
 
@@ -79,6 +81,7 @@ locations =
     , location "forest" "I would hate to be here at night."
     , location "cemetery" "This cemetery must be very old."
     , location "cliff" "A place where you can see clearly to the horizon, but have no way to go to what you see."
+    , location "town" "The promise of a warm meal and a cozy fireplace."
     ]
 
 
@@ -94,4 +97,6 @@ scenes =
     , scene "trials" "Light?"
     , scene "facingDarkness" "Facing the darkness"
     , scene "fadeToBlack" "Fade to black"
+    , scene "lightsInTheDarkness" "Lights in the darkness"
+    , scene "lightWithin" "Light within"
     ]

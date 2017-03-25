@@ -27,6 +27,7 @@ rulesData =
         , cemetery
         , gravestone
         , raiders
+        , town
         ]
 
 
@@ -642,8 +643,19 @@ cemetery =
         :: []
 
 
-
--- Characters
+town : List (RuleData Engine.Rule)
+town =
+    []
+        ++ { summary = "wheezy's final lesson"
+           , interaction = withLocation "town"
+           , conditions =
+                [ currentSceneIs "lightsInTheDarkness" ]
+           , changes = [ loadScene "lightWithin" ]
+           , narrative =
+                [ "\"Hey, look down there.  There's a small town down there!\"\n\nWheezy doesn't seem to move.  \"Hey, get up.  It's beautiful, look at it.  We can go there, they can help us.\"\n\nHe turns to face me, but he can't get up.  He is hurt, bad.  \"I won't be going with you.  My journey ends here.\"\n\n\"No!  We are so close, we must get there!  Let me help you.\"  I try to help him up, but it doesn't work.\n\n\"You go.  I've been there before.  I've made this same journey, back and forth, many, many times.  Now it is your turn.\"\n\n\"What do you mean?  You've been to the town?  Why would you ever leave?  Why would you ever return to the darkness?\"\n\n\"The same reason you stayed with me instead of going with the raiders.  To help people who have lost their way.  To shine a little light of my own so they can find it again.\"\n\n\"I don't understand.  When we met, you were alone.  You hadn't found anyone.\"\n\n\"Of course I did.\"\n\nHe closes his eyes and takes a slow, deep breath, then lets it out, without any wheezing for the first time.\n\n\"I found you.\"\n\nI wait for him to continue, but he doesn't say anything more.  I know he doesn't need to.  And I know those words were his last.\n\nI stay with his body almost until sunrise.  Then I bury him there on the top of the cliff, and slowly make my way down to the town.  I know that he was right.  I will return to the darkness.  To honor and remember him.  To help someone else who needs a little extra light.\n\nAnd this time, I feel confident that the darkness won't feel so dark anymore."
+                ]
+           }
+        :: []
 
 
 wheezy : List (RuleData Engine.Rule)
@@ -712,19 +724,40 @@ wheezy =
                 ]
            , changes = [ moveItemToInventory "offer" ]
            , narrative =
-                [ "I rush over to comfort him.\n\nThe lead raider takes two steps closer, but he doesn't attack me.  Instead he says, \"Don't waste your time.  He is a disease.  A drain on society.  He uses up our resources and offers nothing in return.  And your other friend?  A thief.  We helped him once, and he stole from us.\n\nLeave them.  Come with us.  We have a city with shining walls and beautiful parks.  A place of safety and security.  You don't belong here.  We'll bring you to our city.\"\n\nI look over at Wheezy.  He is bleeding badly from the wound on his face.  What help can I be to him?  The city sounds like what I've been looking for.  Maybe I should go with the raiders."
+                [ "I rush over to comfort him.\n\nThe lead raider takes two steps closer, but he doesn't attack me.  Instead he says, \"Don't waste your time.  He is a disease.  A drain on society.  He uses up our resources and offers nothing in return.  And your other friend?  A thief.  We helped him once, and he stole from us.\n\nLeave them.  Come with us.  We have a city with shining walls and beautiful parks.  A place of safety and security.  You don't belong here.  We'll bring you to our city.\"\n\nI look over at Wheezy.  He is bleeding badly from the wound on his face.  What help can I be to him?  Maybe I should go with the raiders.  But what about Wheezy?"
+                ]
+           }
+        :: { summary = "comfort wheezy"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "facingDarkness"
+                , itemIsInInventory "offer"
+                ]
+           , changes = [ moveItemToInventory "secondOffer" ]
+           , narrative =
+                [ "I can't just leave Wheezy like this.  I try to comfort him.  \"Don't listen to them.  Everything is going to be alright.  I won't leave you.\"\n\nWheezy struggles to prop himself up.  \"Go to the city.  That's what you've been wanting.  I can make it on my own.\"\n\n\"But--\"\n\nThe lead raider chips in, \"Come on man.  Leave this slug behind.  He knows he's not wanted.\""
                 ]
            }
         :: { summary = "continue to comfort wheezy"
            , interaction = withCharacter "Wheezy"
            , conditions =
                 [ currentSceneIs "facingDarkness"
-                , itemIsInInventory "offer"
+                , itemIsInInventory "secondOffer"
                 ]
-           , changes = []
+           , changes = [ moveItemToInventory "finalOffer" ]
            , narrative =
-                [ "Don't listen to them.  ..."
-                , "comforting wheezy, talk about mother..."
+                [ "I lean down to Wheezy and pull out my photo.\n\n\"You asked me about the woman in the photo.  I remember who she is now.  My mother.  She was so kind and so loving.  I can't believe I forgot.\"\n\nWheezy smiles encouragingly until the raider shouts, \"Come on!  Are you coming with us, or not?  Or has he lured you in to his pathetic filth.  Maybe I was wrong about you.  Maybe you belong with him and the rest of his kind.\"\n\nThey all start kicking dirt at Wheezy and jeering him.  One of them kicks some dirt at me too.\n\n\"Last chance, man.\""
+                ]
+           }
+        :: { summary = "beaten by raiders, protected by Limpy and friends"
+           , interaction = withCharacter "Wheezy"
+           , conditions =
+                [ currentSceneIs "facingDarkness"
+                , itemIsInInventory "finalOffer"
+                ]
+           , changes = [ loadScene "lightsInTheDarkness" ]
+           , narrative =
+                [ "I move around to block the dirt from hitting Wheezy, and ignore the raiders.\n\n\"You know the favorite thing my mother taught me?  She taught me that darkness does not exist.  Darkness is simply the absence of light.  You can fill darkness with light, but you cannot fill light with darkness.  She taught me that if I remember to focus on the light, I will never be alone in the dark.\"\n\nWheezy smiles again and pats my hand.  \"I think I would have liked your mother.\"\n\nBut the raiders are not smiling.  Their faces turn ugly.  The leader leans right into my face.  \"Nice speech.  How's that working for you now?\"\n\nHe punches me so hard, he sends me sprawling to the ground beside Wheezy with a fresh gash of my own in my face.  The other raiders join in, kicking, punching, and attacking us.  I realize I just made things worse.  I catch a glimpse of Wheezy shielding his face between the raider's blows.  Our eyes meet for a brief second.  But he doesn't look upset.  Instead he smiles at me.\n\nBefore I realize what is happening, I become aware of other people surrounding us now.  More raiders, come to join in beating us?  But they seem familiar, and I see that they are forming a circle around us.  Protecting us.  It's Limpy, and his friends.  They outnumber the raiders, but they are not fighting, they just stand in silent solidarity, facing down the raiders with their resolute stares.  The raiders cannot reach us anymore.  They are angrier than ever, but don't know what to do.  Eventually, they slink away, sputtering slurs, but rendered completely inconsequential.  \"Never come to our city.  You're not welcome anymore.\"\n\nLimpy and his friends stand guard until the raiders are out of sight, then they slowly break apart and filter away.  Limpy looks at both of us, nods silently, and follows the rest of them until we are alone once again.\n\nWheezy and I lay there on the cliff top for quite a while, looking up at the bright stars in the night sky.  Eventually I roll over.  I notice lights in the distance, far below.  I sit up and look closer.  They are the shimmering lights of small [town] in the valley below."
                 ]
            }
         :: []
@@ -762,7 +795,7 @@ raiders =
                 ]
            , changes = [ moveItemToInventory "offer" ]
            , narrative =
-                [ "\"Leave him alone!\"  I try to stop them from hurting Wheezy, but they shove me away, laughing, and kick Wheezy again.\n\n\"Hey!\"  I push them away.  One of them raises his fist, about to punch me.  I prepare to block, but the lead raider steps in and catches his arm.  \"That's not necessary.\" \n\nHe turns to me.  \"You're wasting your time.  Your friend here is a disease.  He is drain on society.  He uses up our resources and offers nothing in return.  And the other one, with the limp?  A thief.  We helped him once, and he stole from us.\n\nLeave them.  Come with us.  We have a city with shining walls and beautiful parks.  A place of safety and security.  You don't belong here.  We'll bring you to our city.\"\n\nI look over at Wheezy.  He is bleeding badly from the wound on his face.  What help can I be to him?  The city sounds like what I've been looking for.  Maybe I should go with the raiders."
+                [ "\"Leave him alone!\"  I try to stop them from hurting Wheezy, but they shove me away, laughing, and kick Wheezy again.\n\n\"Hey!\"  I push them away.  One of them raises his fist, about to punch me.  I prepare to block, but the lead raider steps in and catches his arm.  \"That's not necessary.\" \n\nHe turns to me.  \"You're wasting your time.  Your friend here is a disease.  He is drain on society.  He uses up our resources and offers nothing in return.  And the other one, with the limp?  A thief.  We helped him once, and he stole from us.\n\nLeave them.  Come with us.  We have a city with shining walls and beautiful parks.  A place of safety and security.  You don't belong here.  We'll bring you to our city.\"\n\nI look over at Wheezy.  He is bleeding badly from the wound on his face.  What help can I be to him?  Maybe I should go with the raiders.  But what about Wheezy?"
                 ]
            }
         :: { summary = "go with raiders to city"
@@ -784,8 +817,6 @@ raiders =
 
 {-
    Remaining:
-    - final challenge, comforting Wheezy - raiders keep trying to convince you to come with them, you can keep talking to wheezy about his mother and your mother and what she taught you, eventually raiders will go away (like how to deal with bullies on bus example).  Before leaving, they stop bribing you and start attacking you.  Limpy and his friends come out of the wordwork and form a circle around you, protecting you and standing in solidarity, and they leave.  Fight darkness with light.  (at any time, if you interact with raiders, they take you to city, get that ending, unless you wait until they fight you, maybe interacting with them then makes them beat you up and leave you and wheezy dying in the cemetery, "never finding the light (dying seeing the lights of the town below the cliff, knowing you'll never get there)."
-    - "good ending", you see lights of fires in town, tell wheezy, but he is dying, epiphany
     - add memories from mother for photo
     - go back and add paths from field:
       - hiding in darkness (restarts)
